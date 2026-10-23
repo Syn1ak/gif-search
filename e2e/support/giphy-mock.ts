@@ -8,6 +8,7 @@ import type {
 const API_ORIGIN = 'https://api.giphy.com';
 const API_PATH = '/v1/gifs';
 const DEFAULT_PAGE_SIZE = 30;
+const MEDIA_URL = /^https:\/\/media\d*\.giphy\.com\//;
 /** 1×1 transparent GIF served for every Giphy media URL, so tests never download real media. */
 const TINY_GIF = Buffer.from('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', 'base64');
 
@@ -117,9 +118,12 @@ export class GiphyMock {
         });
       },
     );
-    await this.page.route(/^https:\/\/media\d*\.giphy\.com\//, (route) =>
+    // Context-wide, so tabs the app opens get it too; CORS like the real CDN, which downloads rely on.
+    // A page route for a media URL (e.g. to fail one download) still takes precedence over it.
+    await this.page.context().route(MEDIA_URL, (route) =>
       route.fulfill({
         contentType: 'image/gif',
+        headers: { 'Access-Control-Allow-Origin': '*' },
         body: TINY_GIF,
       }),
     );
@@ -164,6 +168,11 @@ export class GiphyMock {
           },
         }),
     );
+  }
+
+  /** Makes one media file unreachable for this page, e.g. to fail a download. */
+  async mediaUnavailable(url: string): Promise<void> {
+    await this.page.route(url, (route) => route.abort('connectionfailed'));
   }
 
   /** Simulates a dropped connection for an endpoint. */

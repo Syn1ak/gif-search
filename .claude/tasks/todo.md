@@ -221,9 +221,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** `FileDownloadService` (`core`): `download$(url, filename)` does fetch → blob → object URL → temporary `<a download>` → revoke. `GifActionsService.download(gif)` names the file `<slug>-<id>.gif`. The button shows a spinner and is disabled while downloading. On failure a snackbar offers "Open in new tab".
 
 **Acceptance criteria:**
-- [ ] Clicking Download saves `<slug>-<id>.gif`; the spinner shows during the fetch.
-- [ ] A failed fetch shows the fallback action, which opens the original URL.
-- [ ] Service tests (mocked `fetch`, spied anchor) cover success, revoke, and failure; e2e asserts the `download` event and its filename.
+- [x] Clicking Download saves `<slug>-<id>.gif`; the spinner shows during the fetch.
+- [x] A failed fetch shows the fallback action, which opens the original URL.
+- [x] Service tests (mocked `fetch`, spied anchor) cover success, revoke, and failure; e2e asserts the `download` event and its filename.
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T15

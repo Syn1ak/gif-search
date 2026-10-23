@@ -42,5 +42,26 @@
       <mat-icon>content_copy</mat-icon>
       Copy link
     </button>
+    <!-- disabledInteractive keeps the button focusable (aria-disabled) while the download runs. -->
+    <button
+      matButton="filled"
+      type="button"
+      disabledInteractive
+      [disabled]="$isDownloading()"
+      (click)="facade.download(gif)"
+    >
+      <!-- One node per branch, so it is projected into the button's icon slot. -->
+      @if ($isDownloading()) {
+        <mat-progress-spinner
+          matButtonIcon
+          class="[--mat-progress-spinner-active-indicator-color:currentColor]"
+          mode="indeterminate"
+          diameter="18"
+        />
+      } @else {
+        <mat-icon>download</mat-icon>
+      }
+      {{ $isDownloading() ? 'Downloading…' : 'Download' }}
+    </button>
   </mat-dialog-actions>
 }

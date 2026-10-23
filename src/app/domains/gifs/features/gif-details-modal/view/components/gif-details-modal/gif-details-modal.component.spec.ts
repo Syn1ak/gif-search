@@ -2,18 +2,26 @@ import { ApplicationRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 import { buildGif } from '../../../../../../../../testing/gif-builders';
 import { TGif } from '../../../../../models/gif.types';
 import { GifDetailsModalFacade } from '../../../data-access/facades/gif-details-modal.facade';
 import { GifActionsService } from '../../../data-access/services/gif-actions.service';
 
 describe('GifDetailsModalComponent', () => {
-  let gifActions: { copyMediaLink: ReturnType<typeof vi.fn>; copyPageLink: ReturnType<typeof vi.fn> };
+  let gifActions: {
+    copyMediaLink: ReturnType<typeof vi.fn>;
+    copyPageLink: ReturnType<typeof vi.fn>;
+    download$: ReturnType<typeof vi.fn>;
+  };
+  let download$: Subject<void>;
 
   beforeEach(() => {
+    download$ = new Subject<void>();
     gifActions = {
       copyMediaLink: vi.fn(),
       copyPageLink: vi.fn(),
+      download$: vi.fn(() => download$),
     };
     TestBed.configureTestingModule({
       providers: [
@@ -42,6 +50,13 @@ describe('GifDetailsModalComponent', () => {
   function detail(container: HTMLElement, label: string): HTMLElement {
     const term = [...container.querySelectorAll('dt')].find((dt) => dt.textContent?.trim() === label);
     return term!.nextElementSibling as HTMLElement;
+  }
+
+  /** The action button whose text ends with the label (the text starts with its icon name). */
+  function actionButton(container: HTMLElement, label: string): HTMLButtonElement {
+    return [...container.querySelectorAll<HTMLButtonElement>('mat-dialog-actions button')].find((button) =>
+      button.textContent?.trim().endsWith(label),
+    )!;
   }
 
   it('shows the full-size GIF over its still frame, labelled by the title', async () => {
@@ -92,16 +107,33 @@ describe('GifDetailsModalComponent', () => {
   it('copies the media link and the GIPHY page link', async () => {
     const gif = buildGif();
     const container = await openDialog(gif);
-    const button = (label: string) =>
-      [...container.querySelectorAll<HTMLButtonElement>('mat-dialog-actions button')].find((candidate) =>
-        candidate.textContent?.trim().endsWith(label),
-      )!;
 
-    button('Copy link').click();
+    actionButton(container, 'Copy link').click();
     expect(gifActions.copyMediaLink).toHaveBeenCalledWith(gif);
 
-    button('Copy GIPHY page link').click();
+    actionButton(container, 'Copy GIPHY page link').click();
     expect(gifActions.copyPageLink).toHaveBeenCalledWith(gif);
+  });
+
+  it('downloads the GIF, showing a spinner and staying focusable but disabled meanwhile', async () => {
+    const gif = buildGif();
+    const container = await openDialog(gif);
+    const settle = () => TestBed.inject(ApplicationRef).whenStable();
+
+    actionButton(container, 'Download').click();
+    await settle();
+
+    expect(gifActions.download$).toHaveBeenCalledWith(gif);
+    const busyButton = actionButton(container, 'Downloading…');
+    expect(busyButton.querySelector('mat-progress-spinner')).not.toBeNull();
+    expect(busyButton.getAttribute('aria-disabled')).toBe('true');
+    expect(busyButton.disabled).toBe(false);
+
+    download$.complete();
+    await settle();
+
+    expect(actionButton(container, 'Download').getAttribute('aria-disabled')).not.toBe('true');
+    expect(container.querySelector('mat-progress-spinner')).toBeNull();
   });
 
   it('says what is unknown when Giphy has no author, date, size or source', async () => {

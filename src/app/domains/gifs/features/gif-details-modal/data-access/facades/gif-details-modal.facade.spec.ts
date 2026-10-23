@@ -2,6 +2,7 @@ import { ApplicationRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 import { buildGif } from '../../../../../../../testing/gif-builders';
 import { GifActionsService } from '../services/gif-actions.service';
 import { GifDetailsModalFacade } from './gif-details-modal.facade';
@@ -75,5 +76,20 @@ describe('GifDetailsModalFacade', () => {
 
     expect(copyMediaLink).toHaveBeenCalledWith(gif);
     expect(copyPageLink).toHaveBeenCalledWith(gif);
+  });
+
+  it('tracks the running download and starts no second one meanwhile', () => {
+    const download$ = new Subject<void>();
+    const startDownload = vi.spyOn(TestBed.inject(GifActionsService), 'download$').mockReturnValue(download$);
+
+    facade.download(buildGif());
+    facade.download(buildGif({ id: 'xyz' }));
+
+    expect(startDownload).toHaveBeenCalledTimes(1);
+    expect(facade.$downloadingGifId()).toBe('abc');
+
+    download$.complete();
+
+    expect(facade.$downloadingGifId()).toBeNull();
   });
 });

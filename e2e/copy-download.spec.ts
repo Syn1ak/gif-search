@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 import { buildGifs, expect, test } from './support/giphy-mock';
 
 test.use({ permissions: ['clipboard-read', 'clipboard-write'] });
@@ -37,5 +38,39 @@ test.describe('copy links', () => {
     await expect(page.getByText('Link copied')).toBeVisible();
     expect(await readClipboard(page)).toBe('https://media.giphy.com/media/gif-2/giphy.gif');
     await expect(page.getByRole('dialog')).toHaveCount(0);
+  });
+});
+
+test.describe('download', () => {
+  const ORIGINAL_URL = 'https://media.giphy.com/media/gif-1/giphy.gif';
+
+  test('saves the original GIF as <slug>-<id>.gif', async ({ page, giphy }) => {
+    await giphy.trending(buildGifs(3));
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Open details for Funny GIF gif-1' }).click();
+
+    const downloadEvent = page.waitForEvent('download');
+    await page.getByRole('dialog').getByRole('button', { name: 'Download' }).click();
+    const download = await downloadEvent;
+
+    expect(download.suggestedFilename()).toBe('funny-gif-1.gif');
+    const file = await readFile(await download.path());
+    expect(file.subarray(0, 6).toString('ascii')).toBe('GIF89a');
+  });
+
+  test('offers to open the GIF in a new tab when the download fails', async ({ page, giphy }) => {
+    await giphy.trending(buildGifs(3));
+    await giphy.mediaUnavailable(ORIGINAL_URL);
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Open details for Funny GIF gif-1' }).click();
+
+    await page.getByRole('dialog').getByRole('button', { name: 'Download' }).click();
+
+    await expect(page.getByText('Couldn’t download the GIF.')).toBeVisible();
+    const popupEvent = page.context().waitForEvent('page');
+    await page.getByRole('button', { name: 'Open in new tab' }).click();
+    const popup = await popupEvent;
+
+    await expect(popup).toHaveURL(ORIGINAL_URL);
   });
 });
