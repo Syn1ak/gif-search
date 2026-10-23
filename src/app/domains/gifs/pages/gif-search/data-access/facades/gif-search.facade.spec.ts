@@ -116,4 +116,92 @@ describe('GifSearchFacade', () => {
       expect(facade.$items()).toEqual([]);
     });
   });
+
+  describe('loading more', () => {
+    const ids = () => facade.$items().map((gif) => gif.id);
+    const page = (prefix: string, count = 2) =>
+      Array.from({ length: count }, (_, i) => gifDto(`${prefix}${i}`));
+
+    function loadFirstTrendingPage(total = 100): void {
+      facade.search('');
+      trending$.next(listResponse(page('a'), total));
+    }
+
+    it('appends the next page and drops GIFs that were already shown', () => {
+      loadFirstTrendingPage();
+      const next$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      client.trending$.mockReturnValue(next$);
+
+      facade.loadMore();
+
+      expect(client.trending$).toHaveBeenLastCalledWith({ offset: 2 });
+      expect(facade.$status()).toBe('loading-more');
+      expect(ids()).toEqual(['a0', 'a1']);
+
+      next$.next(listResponse([gifDto('a1'), gifDto('b0')], 100, 2));
+
+      expect(facade.$status()).toBe('loaded');
+      expect(ids()).toEqual(['a0', 'a1', 'b0']);
+    });
+
+    it('does not request the same page twice while it is loading', () => {
+      loadFirstTrendingPage();
+      client.trending$.mockReturnValue(new Subject());
+
+      facade.loadMore();
+      facade.loadMore();
+
+      expect(client.trending$).toHaveBeenCalledTimes(2);
+    });
+
+    it('does nothing before the first page has loaded', () => {
+      facade.search('');
+      facade.loadMore();
+
+      expect(client.trending$).toHaveBeenCalledTimes(1);
+    });
+
+    it('stops at the total reported by Giphy', () => {
+      loadFirstTrendingPage(2);
+
+      expect(facade.$hasMore()).toBe(false);
+      facade.loadMore();
+
+      expect(client.trending$).toHaveBeenCalledTimes(1);
+    });
+
+    it('stops at the highest offset the endpoint accepts', () => {
+      facade.search('');
+      trending$.next(listResponse(page('a', 30), 10000, 480));
+
+      expect(facade.$hasMore()).toBe(false);
+    });
+
+    it('stops when Giphy returns an empty page', () => {
+      loadFirstTrendingPage();
+      const next$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      client.trending$.mockReturnValue(next$);
+
+      facade.loadMore();
+      next$.next(listResponse([], 100, 2));
+
+      expect(facade.$hasMore()).toBe(false);
+      expect(ids()).toEqual(['a0', 'a1']);
+    });
+
+    it('drops a pending page when a new search starts', () => {
+      loadFirstTrendingPage();
+      const next$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      const cats$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      client.trending$.mockReturnValue(next$);
+      client.search$.mockReturnValue(cats$);
+
+      facade.loadMore();
+      facade.search('cats');
+      next$.next(listResponse(page('b'), 100, 2));
+      cats$.next(listResponse(page('c')));
+
+      expect(ids()).toEqual(['c0', 'c1']);
+    });
+  });
 });

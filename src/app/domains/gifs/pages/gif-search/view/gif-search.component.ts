@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
+import { InfiniteScrollDirective } from '../../../../../shared/ui/directives/infinite-scroll.directive';
 import { GifSearchFacade } from '../data-access/facades/gif-search.facade';
 import { GifGridComponent } from './components/gif-grid/gif-grid.component';
 import { GridSkeletonComponent } from './components/grid-skeleton/grid-skeleton.component';
@@ -10,7 +12,14 @@ import { SearchFormComponent } from './components/search-form/search-form.compon
 /** The URL is the source of truth: `?q` drives the facade, the search form only changes the URL. */
 @Component({
   selector: 'app-gif-search',
-  imports: [GifGridComponent, GridSkeletonComponent, ResultsStateComponent, SearchFormComponent],
+  imports: [
+    GifGridComponent,
+    GridSkeletonComponent,
+    ResultsStateComponent,
+    SearchFormComponent,
+    InfiniteScrollDirective,
+    MatProgressSpinner,
+  ],
   templateUrl: './gif-search.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

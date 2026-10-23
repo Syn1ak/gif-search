@@ -160,9 +160,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** `InfiniteScrollDirective` (`shared/ui`) uses an `IntersectionObserver` sentinel, with `disabled` and `rootMargin` inputs and a `reached` output; it disconnects on destroy. `facade.loadMore()` guards on `$hasMore` and a load already in flight, appends the next offset, drops duplicate ids, and stops at `min(total_count, offsetCap)`. The grid shows an "End of results" marker.
 
 **Acceptance criteria:**
-- [ ] Scrolling near the bottom loads page 2 with no duplicates and no column jumps; at the end the marker shows and no more requests are made.
-- [ ] Directive tests (mocked IO) cover: emits on intersect, silent when disabled, disconnects on destroy. Facade tests cover dedupe, the end condition, and the in-flight guard.
-- [ ] e2e: scroll → page 2 request with `offset=30` → end marker.
+- [x] Scrolling near the bottom loads page 2 with no duplicates and no column jumps; at the end the marker shows and no more requests are made.
+- [x] Directive tests (mocked IO) cover: emits on intersect, silent when disabled, disconnects on destroy. Facade tests cover dedupe, the end condition, and the in-flight guard.
+- [x] e2e: scroll → page 2 request with `offset=30` → end marker.
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T11

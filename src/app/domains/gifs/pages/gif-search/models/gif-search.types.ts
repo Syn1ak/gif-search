@@ -2,7 +2,7 @@ import { TGifFeedMode } from '../../../../../core/models/giphy-config.types';
 import { TGiphyErrorKind } from '../../../../../core/models/giphy-error';
 import { TGif } from '../../../models/gif.types';
 
-export type TGifSearchStatus = 'idle' | 'loading' | 'loaded' | 'error';
+export type TGifSearchStatus = 'idle' | 'loading' | 'loading-more' | 'loaded' | 'error';
 
 export type TGifSearchState = {
   query: string;

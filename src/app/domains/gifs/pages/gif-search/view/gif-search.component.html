@@ -27,6 +27,22 @@
     @default {
       @if (facade.$items().length) {
         <app-gif-grid [items]="facade.$items()" />
+
+        <div
+          aria-hidden="true"
+          appInfiniteScroll
+          [infiniteScrollDisabled]="!facade.$canLoadMore()"
+          (scrolledToEnd)="facade.loadMore()"
+        ></div>
+
+        @if (facade.$status() === 'loading-more') {
+          <div role="status" class="flex items-center justify-center gap-3 py-8 text-on-surface-variant">
+            <mat-progress-spinner mode="indeterminate" diameter="24" />
+            Loading more GIFs…
+          </div>
+        } @else if (!facade.$hasMore()) {
+          <p class="py-8 text-center text-sm text-on-surface-variant">End of results</p>
+        }
       } @else if (facade.$mode() === 'search') {
         <app-results-state [query]="facade.$query()" />
       }
