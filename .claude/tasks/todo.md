@@ -39,9 +39,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** `scripts/write-env.mjs` reads `GIPHY_API_KEY` from `.env` or the process env and writes `environment.generated.ts`. `environment.ts` re-exports it. The `GIPHY_CONFIG` injection token carries `apiKey`, `baseUrl`, `pageSize = 30`, and `offsetCap { search: 4999, trending: 499 }`.
 
 **Acceptance criteria:**
-- [ ] `npm run env` generates the file, which is gitignored. `npm start` and `npm run build` run `env` first.
-- [ ] A missing key writes `''` and prints a warning; the build still succeeds.
-- [ ] `.env.example` documents the variable.
+- [x] `npm run env` generates the file, which is gitignored. `npm start` and `npm run build` run `env` first.
+- [x] A missing key writes `''` and prints a warning; the build still succeeds.
+- [x] `.env.example` documents the variable.
 
 **Verification:** run `npm run env` with and without `.env`; standard trio.
 **Dependencies:** T1
