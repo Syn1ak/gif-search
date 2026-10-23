@@ -77,8 +77,8 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Define the client-side `TGif` / `TGifAuthor` types and a pure `toGif()` mapper. It picks renditions (grid uses `fixed_width` webp plus still; the modal uses `original`), applies the alt fallback, sanitises dates (`0000-00-00…` becomes `null`), maps the author (or `null`), and converts the size to a number.
 
 **Acceptance criteria:**
-- [ ] The mapper handles a full GIF, a missing `user`, an empty `alt_text`, the zero date, and missing renditions, proven by table-driven tests.
-- [ ] Nothing outside `utils/gif.mapper.ts` touches the Giphy DTO shape.
+- [x] The mapper handles a full GIF, a missing `user`, an empty `alt_text`, the zero date, and missing renditions, proven by table-driven tests.
+- [x] Nothing outside `utils/gif.mapper.ts` touches the Giphy DTO shape.
 
 **Verification:** standard trio.
 **Dependencies:** T4

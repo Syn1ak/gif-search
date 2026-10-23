@@ -54,7 +54,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 - [x] T3: API key pipeline and `GIPHY_CONFIG`
 - [x] T4: Giphy DTOs, `GifsClient`, and API-key interceptor
 - [x] T5: Giphy error normalisation
-- [ ] T6: `TGif` view model and mapper
+- [x] T6: `TGif` view model and mapper
 
 **Checkpoint A: Foundation.** Lint, tests, and build pass; the theme renders in light and dark; review with the owner.
 
