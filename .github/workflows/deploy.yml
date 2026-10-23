@@ -1,6 +1,6 @@
 # Lint, test and build every push and pull request; deploy main to GitHub Pages.
-# One-time setup (see README): add the GIPHY_API_KEY repository secret and set
-# Settings → Pages → Source to "GitHub Actions".
+# One-time setup: add the GIPHY_API_KEY repository secret and set Settings → Pages → Source to
+# "GitHub Actions".
 name: CI and deploy
 
 on:
@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   check:
-    name: Lint, test and build
+    name: Lint, unit tests and build
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -47,20 +47,6 @@ jobs:
       - name: Unit tests with coverage thresholds
         run: npm run test:coverage
 
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
-
-      - name: End-to-end tests
-        run: npm run e2e
-
-      - name: Upload Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v7
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
-
       - name: Build for GitHub Pages
         env:
           # The site is served from /<repository-name>/, so the repository name never has to be hard-coded.
@@ -77,9 +63,42 @@ jobs:
         with:
           path: dist/gif-search/browser
 
+  e2e:
+    name: End-to-end tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Playwright's image ships Chromium with all its system libraries, so no slow
+    # `playwright install --with-deps` (an apt download on every run). Keep the tag equal to the
+    # @playwright/test version in package-lock.json. User 1001 is the runner's user, as Playwright's docs advise.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # No API key needed: every scenario mocks the Giphy API.
+      - name: End-to-end tests
+        run: npm run e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
   deploy:
     name: Deploy to GitHub Pages
-    needs: check
+    needs: [check, e2e]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
