@@ -53,7 +53,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": ["src/styles/tailwind.css", "src/styles.scss"]
           },
           "configurations": {
             "production": {

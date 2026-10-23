@@ -26,9 +26,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Add Angular Material and Tailwind v4 so they coexist. The Material M3 theme with light/dark tokens goes in `styles.scss`, and Tailwind goes in plain CSS with `@theme` mapped onto `--mat-sys-*`. The `dark` variant is driven by a class on `<html>`.
 
 **Acceptance criteria:**
-- [ ] A `mat-flat-button` and a `bg-surface text-on-surface p-4` div render correctly together, with no preflight breakage of Material.
-- [ ] Toggling `color-scheme: dark` plus `.dark` on `<html>` (by hand in devtools) switches both Material and Tailwind colours.
-- [ ] No Tailwind processing goes through Sass, and there is no `@apply` in component styles.
+- [x] A `mat-flat-button` and a `bg-surface text-on-surface p-4` div render correctly together, with no preflight breakage of Material.
+- [x] Toggling `color-scheme: dark` plus `.dark` on `<html>` (by hand in devtools) switches both Material and Tailwind colours.
+- [x] No Tailwind processing goes through Sass, and there is no `@apply` in component styles.
 
 **Verification:** standard trio; manual visual check in light and dark.
 **Dependencies:** T1

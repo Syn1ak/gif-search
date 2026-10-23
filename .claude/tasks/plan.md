@@ -50,7 +50,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 
 ### Phase 1: Foundation
 - [x] T1: Scaffold the Angular 22 workspace and tooling
-- [ ] T2: Material M3 + Tailwind v4 theme foundation
+- [x] T2: Material M3 + Tailwind v4 theme foundation
 - [ ] T3: API key pipeline and `GIPHY_CONFIG`
 - [ ] T4: Giphy DTOs, `GifsClient`, and API-key interceptor
 - [ ] T5: Giphy error normalisation

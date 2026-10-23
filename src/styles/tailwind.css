@@ -1,0 +1,49 @@
+/*
+ * Tailwind v4 lives in plain CSS: it must not pass through the Sass compiler.
+ * Everything is layered, while Angular Material styles stay unlayered, so Material always
+ * wins over preflight and utilities and the two never fight over component internals.
+ */
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@source '../app';
+
+/* `dark:` follows the class the theme service puts on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Material M3 system tokens exposed as Tailwind colors. `inline` keeps the var() reference,
+ * so utilities follow the active color-scheme without a separate dark palette.
+ */
+@theme inline {
+  --color-primary: var(--mat-sys-primary);
+  --color-on-primary: var(--mat-sys-on-primary);
+  --color-primary-container: var(--mat-sys-primary-container);
+  --color-on-primary-container: var(--mat-sys-on-primary-container);
+  --color-secondary-container: var(--mat-sys-secondary-container);
+  --color-on-secondary-container: var(--mat-sys-on-secondary-container);
+  --color-tertiary: var(--mat-sys-tertiary);
+  --color-tertiary-container: var(--mat-sys-tertiary-container);
+  --color-on-tertiary-container: var(--mat-sys-on-tertiary-container);
+  --color-error: var(--mat-sys-error);
+  --color-error-container: var(--mat-sys-error-container);
+  --color-on-error-container: var(--mat-sys-on-error-container);
+  --color-surface: var(--mat-sys-surface);
+  --color-surface-dim: var(--mat-sys-surface-dim);
+  --color-surface-container-low: var(--mat-sys-surface-container-low);
+  --color-surface-container: var(--mat-sys-surface-container);
+  --color-surface-container-high: var(--mat-sys-surface-container-high);
+  --color-surface-container-highest: var(--mat-sys-surface-container-highest);
+  --color-on-surface: var(--mat-sys-on-surface);
+  --color-on-surface-variant: var(--mat-sys-on-surface-variant);
+  --color-outline: var(--mat-sys-outline);
+  --color-outline-variant: var(--mat-sys-outline-variant);
+  --color-scrim: var(--mat-sys-scrim);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: var(--mat-sys-corner-large);
+}
