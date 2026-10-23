@@ -65,8 +65,8 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** An error interceptor maps HTTP failures and Giphy "synthetic" responses (`meta.status` 200 with an empty `response_id`) into a typed `TGiphyError` (`unauthorized | rate-limited | network | unknown`).
 
 **Acceptance criteria:**
-- [ ] 401/403 map to `unauthorized`, 429 to `rate-limited`, status 0 to `network`, and everything else to `unknown`, proven by tests.
-- [ ] A synthetic 200 response becomes an error and a normal 200 passes through, proven by tests.
+- [x] 401/403 map to `unauthorized`, 429 to `rate-limited`, status 0 to `network`, and everything else to `unknown`, proven by tests.
+- [x] A synthetic 200 response becomes an error and a normal 200 passes through, proven by tests.
 
 **Verification:** standard trio.
 **Dependencies:** T4
