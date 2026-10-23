@@ -4,16 +4,32 @@
 !.env.example
 src/environments/environment.generated.ts
 
-# Dependencies & build
-node_modules/
-dist/
-.angular/
-coverage/
-playwright-report/
-test-results/
+# Compiled output
+/dist
+/tmp
+/out-tsc
 
-# OS / IDE
-.DS_Store
+# Node
+/node_modules
+npm-debug.log
+
+# Angular / tests
+/.angular/cache
+.sass-cache/
+/coverage
+/playwright-report
+/test-results
+__screenshots__/
+
+# IDEs and editors
 .idea/
 .vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 !.vscode/extensions.json
+.history/*
+
+# System files
+.DS_Store
+Thumbs.db

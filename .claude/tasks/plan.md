@@ -1,6 +1,6 @@
 # Implementation Plan: GIF Search (Giphy)
 
-Source of truth: [`.claude/SPEC.md`](../.claude/SPEC.md). Detailed tasks: [`tasks/todo.md`](./todo.md).
+Source of truth: [`.claude/SPEC.md`](../SPEC.md). Detailed tasks: [`.claude/tasks/todo.md`](./todo.md).
 
 ## Overview
 
@@ -49,7 +49,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 ## Task List
 
 ### Phase 1: Foundation
-- [ ] T1: Scaffold the Angular 22 workspace and tooling
+- [x] T1: Scaffold the Angular 22 workspace and tooling
 - [ ] T2: Material M3 + Tailwind v4 theme foundation
 - [ ] T3: API key pipeline and `GIPHY_CONFIG`
 - [ ] T4: Giphy DTOs, `GifsClient`, and API-key interceptor

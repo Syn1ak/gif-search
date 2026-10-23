@@ -1,6 +1,6 @@
 # Spec: GIF Search (Giphy)
 
-> Status: **APPROVED** (2026-10-23). Implementation plan: [`tasks/plan.md`](../tasks/plan.md), tasks: [`tasks/todo.md`](../tasks/todo.md).
+> Status: **APPROVED** (2026-10-23). Implementation plan: [`.claude/tasks/plan.md`](./tasks/plan.md), tasks: [`.claude/tasks/todo.md`](./tasks/todo.md).
 
 ## Objective
 
@@ -85,7 +85,10 @@ The architecture is layered and domain-driven. These rules are binding for all c
 
 ```
 gif-search/
-├── .claude/SPEC.md                    # this file
+├── .claude/
+│   ├── SPEC.md                        # this file
+│   ├── tasks/{plan,todo}.md           # implementation plan and task list
+│   └── launch.json                    # dev-server preview config
 ├── .mcp.json                          # Angular CLI MCP server
 ├── README.md                          # setup, API key, GitHub setup, architecture overview, decisions
 ├── .env.example                       # .env is gitignored

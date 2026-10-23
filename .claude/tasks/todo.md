@@ -1,6 +1,6 @@
 # Tasks: GIF Search
 
-Plan and decisions are in [`plan.md`](./plan.md); requirements are in [`.claude/SPEC.md`](../.claude/SPEC.md).
+Plan and decisions are in [`plan.md`](./plan.md); requirements are in [`.claude/SPEC.md`](../SPEC.md).
 
 **Standard verification for every task:** `npm run lint && npm test && npm run build`. From T9 on, `npm run e2e` is added.
 At the end of each task Claude stops and proposes the commit (the suggested title is listed per task). **The owner commits.**
@@ -13,9 +13,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Generate the Angular 22 app (standalone, zoneless, SCSS, routing, Vitest) into the existing repo without touching `.claude/`, `.env*`, or `.mcp.json`. Add strict TypeScript, angular-eslint, Prettier, bundle budgets, and the base npm scripts.
 
 **Acceptance criteria:**
-- [ ] `ng new` output is merged in, with `--skip-git`, the existing `.gitignore` merged, and the dev server showing a placeholder app.
-- [ ] `strict`, `strictTemplates`, and `noUncheckedIndexedAccess` are on. ESLint (angular-eslint, with an `explicit-any` ban) and Prettier (single quotes, width 110) are configured, and the npm scripts `lint`, `format`, `test`, `test:watch`, and `test:coverage` exist.
-- [ ] Initial-bundle budget is 500 kB warn / 600 kB error.
+- [x] `ng new` output is merged in, with `--skip-git`, the existing `.gitignore` merged, and the dev server showing a placeholder app.
+- [x] `strict`, `strictTemplates`, and `noUncheckedIndexedAccess` are on. ESLint (angular-eslint, with an `explicit-any` ban) and Prettier (single quotes, width 110) are configured, and the npm scripts `lint`, `format`, `test`, `test:watch`, and `test:coverage` exist.
+- [x] Initial-bundle budget is 500 kB warn / 600 kB error.
 
 **Verification:** standard trio passes; `npm start` serves on :4200.
 **Dependencies:** none
