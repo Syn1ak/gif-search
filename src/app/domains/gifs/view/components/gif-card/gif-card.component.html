@@ -2,20 +2,40 @@
 <div class="group relative">
   <button
     type="button"
-    class="relative block w-full overflow-hidden rounded-card bg-surface-container-high focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+    class="relative block w-full overflow-hidden rounded-card bg-surface-container-high focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:animate-none"
+    [class.animate-pulse]="image.$state() === 'loading'"
     [style.aspect-ratio]="$aspectRatio()"
     [attr.aria-label]="'Open details for ' + $gif().title"
     (click)="$open.emit($gif())"
   >
-    <img
-      class="block size-full object-cover transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none"
-      [src]="$gif().preview.url"
-      [width]="$gif().preview.width"
-      [height]="$gif().preview.height"
-      [alt]="$gif().altText"
-      loading="lazy"
-      decoding="async"
-    />
+    <!-- With reduced motion the still frame is shown; the overlay below animates it on hover or focus. -->
+    <picture class="contents">
+      <source media="(prefers-reduced-motion: reduce)" [attr.srcset]="$gif().preview.stillUrl" />
+      <img
+        appImgLoaded
+        #image="appImgLoaded"
+        class="block size-full object-cover transition-[opacity,scale] duration-300 motion-safe:group-hover:scale-105 motion-reduce:transition-none"
+        [src]="$gif().preview.url"
+        [width]="$gif().preview.width"
+        [height]="$gif().preview.height"
+        [alt]="$gif().altText"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+    @if ($isActive()) {
+      <img
+        class="absolute inset-0 size-full object-cover motion-safe:hidden"
+        [src]="$gif().preview.url"
+        alt=""
+        aria-hidden="true"
+      />
+    }
+    @if (image.$state() === 'error') {
+      <span class="absolute inset-0 grid place-items-center text-on-surface-variant">
+        <mat-icon aria-hidden="true">broken_image</mat-icon>
+      </span>
+    }
     <span
       class="pointer-events-none absolute inset-x-0 bottom-0 line-clamp-2 bg-linear-to-t from-black/70 to-transparent px-3 pt-8 pb-2.5 text-left text-sm font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-has-focus-visible:opacity-100"
     >

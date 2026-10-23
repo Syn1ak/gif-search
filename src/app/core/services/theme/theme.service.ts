@@ -51,7 +51,6 @@ export class ThemeService {
     classList.toggle('dark', isDark);
   }
 
-
   private readStoredMode(): TThemeMode {
     try {
       const stored = this.document.defaultView?.localStorage.getItem(THEME_STORAGE_KEY);

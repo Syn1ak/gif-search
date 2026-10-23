@@ -17,7 +17,8 @@
           <img class="absolute inset-0 size-full object-contain" [src]="stillUrl" alt="" aria-hidden="true" />
         }
         <img
-          class="relative block h-auto max-h-[55vh] w-auto max-w-full"
+          appImgLoaded
+          class="relative block h-auto max-h-[55vh] w-auto max-w-full transition-opacity duration-300 motion-reduce:transition-none"
           [src]="gif.original.url"
           [width]="gif.original.width"
           [height]="gif.original.height"

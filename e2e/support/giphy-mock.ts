@@ -273,13 +273,32 @@ export class GiphyMock {
   }
 }
 
-export const test = base.extend<{ giphy: GiphyMock }>({
+/** The browser's own log line for a failed request; tests that answer with errors on purpose cause it. */
+const FAILED_REQUEST_LOG = /^Failed to load resource:/;
+
+export const test = base.extend<{ giphy: GiphyMock; consoleGuard: void }>({
   giphy: [
     async ({ page }, use) => {
       const giphy = new GiphyMock(page);
       await giphy.install();
       await use(giphy);
       expect(giphy.unexpectedRequests, 'Giphy API requests without a mock').toEqual([]);
+    },
+    { auto: true },
+  ],
+  /** Fails any test whose page logs a console error or warning, or throws. */
+  consoleGuard: [
+    async ({ page }, use) => {
+      const problems: string[] = [];
+      page.on('console', (message) => {
+        const isProblem = message.type() === 'error' || message.type() === 'warning';
+        if (isProblem && !FAILED_REQUEST_LOG.test(message.text())) {
+          problems.push(`${message.type()}: ${message.text()}`);
+        }
+      });
+      page.on('pageerror', (error) => problems.push(`uncaught: ${error.message}`));
+      await use();
+      expect(problems, 'Console errors or warnings').toEqual([]);
     },
     { auto: true },
   ],

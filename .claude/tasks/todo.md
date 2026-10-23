@@ -268,8 +268,8 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 
 **Acceptance criteria:**
 - [ ] Lighthouse Accessibility ≥ 95 and CLS < 0.1 on the search page (desktop and mobile).
-- [ ] With reduced motion emulated, the grid shows stills, and hovering or focusing a card animates it (e2e with `reducedMotion: 'reduce'`).
-- [ ] No console errors or warnings across the e2e suite.
+- [x] With reduced motion emulated, the grid shows stills, and hovering or focusing a card animates it (e2e with `reducedMotion: 'reduce'`).
+- [x] No console errors or warnings across the e2e suite.
 
 **Verification:** standard trio + `npm run e2e`; Lighthouse report numbers given in the summary.
 **Dependencies:** T8–T17

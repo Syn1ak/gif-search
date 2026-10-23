@@ -3,6 +3,7 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ImgLoadedDirective } from '../../../../../../../shared/ui/directives/img-loaded.directive';
 import { ERROR_MESSAGES, TErrorMessage } from '../../../../../constants/error-messages.constants';
 import { GifDetailsModalFacade } from '../../../data-access/facades/gif-details-modal.facade';
 import { GifMetaListComponent } from '../gif-meta-list/gif-meta-list.component';
@@ -29,6 +30,7 @@ const NOT_FOUND_MESSAGE: TErrorMessage = {
     MatIconButton,
     MatIcon,
     MatProgressSpinner,
+    ImgLoadedDirective,
     GifMetaListComponent,
   ],
   templateUrl: './gif-details-modal.component.html',

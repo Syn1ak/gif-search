@@ -76,4 +76,42 @@ describe('GifCardComponent', () => {
     expect(copied).toEqual([GIF]);
     expect(opened).toEqual([]);
   });
+
+  it('pulses as a skeleton until the preview loads', async () => {
+    const button = element.querySelector('button')!;
+    expect(button.classList).toContain('animate-pulse');
+
+    element.querySelector('img')!.dispatchEvent(new Event('load'));
+    await fixture.whenStable();
+
+    expect(button.classList).not.toContain('animate-pulse');
+  });
+
+  it('shows a placeholder when the preview fails to load', async () => {
+    element.querySelector('img')!.dispatchEvent(new Event('error'));
+    await fixture.whenStable();
+
+    expect(element.querySelector('mat-icon')!.textContent?.trim()).toBe('broken_image');
+  });
+
+  it('offers the still frame for reduced motion, and animates it while hovered or focused', async () => {
+    const source = element.querySelector('picture source')!;
+    expect(source.getAttribute('media')).toBe('(prefers-reduced-motion: reduce)');
+    expect(source.getAttribute('srcset')).toBe(GIF.preview.stillUrl);
+
+    const overlay = () => element.querySelector('img[aria-hidden="true"]');
+    expect(overlay()).toBeNull();
+
+    element.dispatchEvent(new MouseEvent('mouseenter'));
+    await fixture.whenStable();
+    expect(overlay()!.getAttribute('src')).toBe(GIF.preview.url);
+
+    element.dispatchEvent(new MouseEvent('mouseleave'));
+    await fixture.whenStable();
+    expect(overlay()).toBeNull();
+
+    element.querySelector('button')!.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    await fixture.whenStable();
+    expect(overlay()).not.toBeNull();
+  });
 });

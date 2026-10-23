@@ -52,6 +52,18 @@ body {
     .mat-mdc-dialog-content {
       max-height: none;
     }
+
+    // Full-width buttons, stacked so the main action (Download, last in the DOM) is on top.
+    .mat-mdc-dialog-actions {
+      flex-direction: column-reverse;
+      align-items: stretch;
+      gap: 8px;
+
+      // Outranks Material's `button + button { margin-left: 8px }`; the gap spaces them instead.
+      .mat-mdc-button-base + .mat-mdc-button-base {
+        margin: 0;
+      }
+    }
   }
 }
 
