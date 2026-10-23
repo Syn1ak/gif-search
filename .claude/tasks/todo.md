@@ -86,8 +86,8 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Scope:** S. **Commit:** `feat(gifs): add GIF view model and DTO mapper`
 
 ### Checkpoint A: Foundation
-- [ ] Lint, tests, and build are clean; the theme shows in light and dark
-- [ ] Owner review (and commits made)
+- [x] Lint, tests, and build are clean; the theme shows in light and dark
+- [x] Owner review (and commits made)
 
 ---
 
@@ -131,7 +131,7 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Scope:** M. **Commit:** `test(e2e): set up Playwright with mocked Giphy API`
 
 ### T10: Base form-control infrastructure
-**Description:** Add `ABaseInputComponent<T>` (CVA via `NgControl` self-injection, `ControlContainer`/`formControlName` resolution, touched on blur, `setDisabledState`, `ErrorStateMatcher`, `getErrors()` and `isRequired()`), the `VALIDATION_MESSAGES` token with defaults plus `provideValidationMessages()`, `<app-input-control>` (label, prefix/suffix icon, clear button, loading spinner, `enter` output), and `<app-form-error>`.
+**Description:** Add `ABaseInputComponent<T>` (CVA via `NgControl` self-injection, `ControlContainer`/`formControlName` resolution, touched on blur, `setDisabledState`, `ErrorStateMatcher`, `getErrors()` and `isRequired()`), the `VALIDATION_MESSAGES` token with defaults plus `provideValidationMessages()`, `<app-input-control>` (label, prefix/suffix icon, clear button, loading spinner, `enter` output). Error messages render through Material's `<mat-error>` inside `<app-input-control>`; a separate `<app-form-error>` was dropped because there is no second user.
 
 **Acceptance criteria:**
 - [x] In a reactive-form test host, value flows both ways, blur marks the control touched, `disable()` disables the input, and `required` / `maxlength` show messages only after touch.
@@ -140,7 +140,7 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 
 **Verification:** standard trio (component tests use Material harnesses).
 **Dependencies:** T1 (can run alongside T8)
-**Files:** `shared/ui/forms/a-base-input.component.ts`, `shared/ui/forms/validation-messages.token.ts`, `shared/ui/forms/input-control/*` (+spec), `shared/ui/forms/form-error/*`
+**Files:** `shared/ui/forms/a-base-input.component.ts`, `shared/ui/forms/validation-messages.token.ts`, `shared/ui/forms/input-control/*` (+spec), `shared/ui/forms/directives/host-ng-control.directive.ts`
 **Scope:** M. **Commit:** `feat(shared): add typed base input with CVA and validation messages`
 
 ### T11: Keyword search driven by `?q`
@@ -183,24 +183,25 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Scope:** M. **Commit:** `feat(search): show error states with retry`
 
 ### Checkpoint B: Core flow
-- [ ] Manual pass with the real key: trending → search → scroll → end; DevTools offline → retry
-- [ ] All unit and e2e tests green; owner review and commits
+- [x] Manual pass with the real key: trending → search → scroll → end; DevTools offline → retry
+- [x] All unit and e2e tests green; owner review and commits
 
 ---
 
 ## Phase 3: Details and actions
 
 ### T14: GIF details modal
-**Description:** Feature `gif-details-modal`: `GifDetailsModalFacade.open(gif)` opens a `MatDialog` with `GifDetailsModalComponent`. It shows the full-size GIF (with a still poster until it loads), title, author block (or "Unknown author"), created date (or "Unknown"), rating, dimensions, `file-size` pipe output, source link, and GIPHY page link. The dialog is full-screen below `sm`. A card click (from the page) opens it.
+**Description:** Feature `gif-details-modal`: `GifDetailsModalFacade.open(gif)` opens a `MatDialog` with `GifDetailsModalComponent`. It shows the full-size GIF (with a still poster until it loads), title, author block (or "Unknown author"), created date (or "Unknown"), rating, dimensions, `file-size` pipe output, source link, and GIPHY page link. The dialog is full-screen below `sm`. A card click (from the page) opens it. Every new icon name is added to the Material Symbols `icon_names` list in `src/index.html` (kept sorted); otherwise the icon renders as plain text.
 
 **Acceptance criteria:**
-- [ ] Clicking a card or pressing Enter/Space on it opens the dialog with correct data; Esc or the close button returns focus to the card.
-- [ ] Component tests cover a full GIF, a missing author, and a missing date; there is a pipe test (B / KB / MB).
-- [ ] e2e: open modal → author and date visible → close.
+- [x] Clicking a card or pressing Enter/Space on it opens the dialog with correct data; Esc or the close button returns focus to the card.
+- [x] The dialog is labelled by its title (`aria-labelledby` points at the title element), and all its icons render as glyphs, not text.
+- [x] Component tests cover a full GIF, a missing author, and a missing date; there is a pipe test (B / KB / MB).
+- [x] e2e: open modal → author and date visible → close.
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T8
-**Files:** `features/gif-details-modal/data-access/facades/gif-details-modal.facade.ts`, `features/gif-details-modal/view/components/{gif-details-modal,gif-meta-list}/*` (+spec), `features/gif-details-modal/view/pipes/file-size.pipe.ts` (+spec), `gif-search.routes.ts`, `e2e/details-modal.spec.ts`
+**Files:** `features/gif-details-modal/data-access/facades/gif-details-modal.facade.ts`, `features/gif-details-modal/view/components/{gif-details-modal,gif-meta-list}/*` (+spec), `features/gif-details-modal/view/pipes/file-size.pipe.ts` (+spec), `gif-search.routes.ts`, `src/index.html` (icon names), `e2e/details-modal.spec.ts`
 **Scope:** M. **Commit:** `feat(gif-details-modal): show GIF details in a dialog`
 
 ### T15: Copy links
@@ -213,7 +214,7 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T14
-**Files:** `features/gif-details-modal/data-access/services/gif-actions.service.ts` (+spec), `gif-details-modal.component.*`, `gif-card/*`, `gif-search.component.ts`, `e2e/copy-download.spec.ts`
+**Files:** `features/gif-details-modal/data-access/services/gif-actions.service.ts` (+spec), `gif-details-modal.component.*`, `gif-card/*`, `gif-search.component.ts`, `src/index.html` (icon names), `e2e/copy-download.spec.ts`
 **Scope:** M. **Commit:** `feat(gif-details-modal): copy GIF and GIPHY page links`
 
 ### T16: Download GIF
@@ -226,7 +227,7 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T15
-**Files:** `core/services/browser/file-download.service.ts` (+spec), `gif-actions.service.ts` (+spec), `gif-details-modal.component.*`, `e2e/copy-download.spec.ts`
+**Files:** `core/services/browser/file-download.service.ts` (+spec), `gif-actions.service.ts` (+spec), `gif-details-modal.component.*`, `src/index.html` (icon names), `e2e/copy-download.spec.ts`
 **Scope:** M. **Commit:** `feat(gif-details-modal): download GIF to the computer`
 
 ### T17: Deep link `?gif=<id>`
@@ -251,7 +252,7 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 ## Phase 4: Polish and ship
 
 ### T18: Theme toggle (system / light / dark)
-**Description:** `ThemeService` (`core`): a `$mode` signal, persisted in `localStorage` (wrapped in try/catch), that applies `color-scheme` and `.dark` to `<html>` and follows the OS in `system` mode. A header icon button cycles the modes, with a tooltip and `aria-label`.
+**Description:** `ThemeService` (`core`): a `$mode` signal, persisted in `localStorage` (wrapped in try/catch), that applies `color-scheme` and `.dark` to `<html>` and follows the OS in `system` mode. A header icon button cycles the modes, with a tooltip and `aria-label`. To avoid a flash of the wrong theme, a small inline script in `src/index.html` reads the stored mode and sets `color-scheme` and `.dark` on `<html>` before Angular boots, using the same storage key as `ThemeService`. The theme icons are added to the Material Symbols `icon_names` list there too.
 
 **Acceptance criteria:**
 - [ ] The toggle cycles system → light → dark, the choice survives a reload, and there is no flash of the wrong theme on load.
@@ -259,7 +260,7 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T7
-**Files:** `core/services/theme/theme.service.ts` (+spec), `core/models/theme.types.ts`, `layout/main-layout/components/header/*`, `core/core.provider.ts`, `e2e/theme.spec.ts`
+**Files:** `core/services/theme/theme.service.ts` (+spec), `core/models/theme.types.ts`, `layout/main-layout/components/header/*`, `core/core.provider.ts`, `src/index.html` (pre-boot theme script, icon names), `e2e/theme.spec.ts`
 **Scope:** M. **Commit:** `feat(theme): add system/light/dark theme toggle`
 
 ### T19: Accessibility, reduced motion, and responsive polish

@@ -18,7 +18,7 @@
   @if (facade.$status() === 'loading') {
     <app-grid-skeleton />
   } @else if (facade.$items().length) {
-    <app-gif-grid [items]="facade.$items()" />
+    <app-gif-grid [items]="facade.$items()" (open)="detailsModal.open($event)" />
 
     <div
       aria-hidden="true"

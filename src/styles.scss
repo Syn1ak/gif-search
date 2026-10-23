@@ -37,6 +37,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+// GIF details dialog (overlay panel class set by GifDetailsModalFacade): wide on desktop and
+// full-screen below Tailwind's `sm`. The headline padding leaves room for the close button.
+.app-gif-details-dialog {
+  --mat-dialog-container-max-width: 52rem;
+  --mat-dialog-headline-padding: 16px 64px 12px 24px;
+  width: 100%;
+
+  @media (width < 40rem) {
+    --mat-dialog-container-small-max-width: 100vw;
+    --mat-dialog-container-shape: 0;
+    height: 100dvh;
+
+    .mat-mdc-dialog-content {
+      max-height: none;
+    }
+  }
+}
+
 // The input-control has its own clear button; hide the browser's one on type="search".
 input[type='search']::-webkit-search-cancel-button,
 input[type='search']::-webkit-search-decoration {

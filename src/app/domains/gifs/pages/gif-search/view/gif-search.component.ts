@@ -5,6 +5,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { InfiniteScrollDirective } from '../../../../../shared/ui/directives/infinite-scroll.directive';
+import { GifDetailsModalFacade } from '../../../features/gif-details-modal/data-access/facades/gif-details-modal.facade';
 import { ERROR_MESSAGES, TErrorMessage } from '../constants/error-messages.constants';
 import { GifSearchFacade } from '../data-access/facades/gif-search.facade';
 import { TResultsState } from '../models/gif-search.types';
@@ -32,6 +33,7 @@ import { SearchFormComponent } from './components/search-form/search-form.compon
 export default class GifSearchComponent {
   private readonly router = inject(Router);
   protected readonly facade = inject(GifSearchFacade);
+  protected readonly detailsModal = inject(GifDetailsModalFacade);
 
   /** `?q`, bound by the router (withComponentInputBinding); undefined when absent. */
   readonly $q = input<string | undefined>(undefined, { alias: 'q' });

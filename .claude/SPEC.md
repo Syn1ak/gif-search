@@ -66,7 +66,7 @@ npm run format              # prettier --write .
 
 **API key handling:** `.env` (gitignored, already created locally) contains `GIPHY_API_KEY=...`. `scripts/write-env.mjs` (run with `node --env-file-if-exists=.env`) generates `environment.generated.ts` (gitignored). The repo commits only `.env.example`. In CI the key comes from the `GIPHY_API_KEY` repository secret. The key still ends up in the public JS bundle; this is inherent to GIPHY's model, which requires client-side calls, and is acceptable for a rate-limited beta key. The README states this explicitly.
 
-**Deploy:** `.github/workflows/deploy.yml` runs lint, unit tests, e2e, and build on push to `main`, with `--base-href /${{ github.event.repository.name }}/` so the repo name does not need to be known upfront. It then publishes to GitHub Pages and copies `index.html` to `404.html` as the SPA fallback. The README documents the one-time GitHub setup: create the repo, add the `GIPHY_API_KEY` secret, and set Pages → Source → GitHub Actions.
+**Deploy:** `.github/workflows/deploy.yml` runs lint, unit tests, e2e, and build on every push to `main` and on every pull request (PRs only run the checks and never deploy). The build uses `--base-href /${{ github.event.repository.name }}/` so the repo name does not need to be known upfront. On `main` it then publishes to GitHub Pages and copies `index.html` to `404.html` as the SPA fallback. The README documents the one-time GitHub setup: create the repo, add the `GIPHY_API_KEY` secret, and set Pages → Source → GitHub Actions.
 
 ## Architecture
 
@@ -113,6 +113,7 @@ gif-search/
         │
         ├── core/                                  # headless only
         │   ├── core.provider.ts                   # router (component input binding), http, icons, theme init
+        │   ├── providers/material-symbols.provider.ts  # <mat-icon> uses the Material Symbols font from index.html
         │   ├── tokens/giphy-config.token.ts       # apiKey, baseUrl, pageSize, offset caps
         │   ├── entities/giphy/
         │   │   ├── gif.dto.ts                     # IGiphyGif, IGiphyImages, IGiphyRendition, IGiphyUser
@@ -126,7 +127,8 @@ gif-search/
         │   │   ├── giphy-api-key.interceptor.ts   # appends api_key only for the GIPHY host
         │   │   └── giphy-error.interceptor.ts     # synthetic-response detection → typed TGiphyError
         │   └── models/
-        │       ├── giphy-error.types.ts           # 'unauthorized' | 'rate-limited' | 'network' | 'unknown'
+        │       ├── giphy-config.types.ts          # TGiphyConfig, TGifFeedMode, TGiphyRating
+        │       ├── giphy-error.ts                 # GiphyApiError, kind 'unauthorized' | 'rate-limited' | 'network' | 'unknown'
         │       └── theme.types.ts
         │
         ├── layout/main-layout/
@@ -147,26 +149,30 @@ gif-search/
         │   │   │   └── gif-meta-list/
         │   │   └── view/pipes/file-size.pipe.ts
         │   └── pages/gif-search/
+        │       ├── constants/                     # search limits, per-error messages
+        │       ├── models/gif-search.types.ts     # page state, results state
+        │       ├── utils/masonry-columns.ts       # shortest-column distribution (AD-4)
         │       ├── data-access/facades/gif-search.facade.ts   # query, items, pagination, status, error
         │       ├── view/components/
         │       │   ├── search-form/               # reactive form, uses <app-input-control>
         │       │   ├── gif-grid/                  # masonry + infinite-scroll sentinel
         │       │   ├── grid-skeleton/
-        │       │   └── results-state/             # empty / error / end-of-results
+        │       │   └── results-state/             # empty result / error with retry, shown in place of the grid
         │       ├── view/gif-search.component.ts   # export default; binds ?q / ?gif via input()
         │       └── gif-search.routes.ts
         │
         └── shared/ui/
             ├── forms/
             │   ├── a-base-input.component.ts      # ABaseInputComponent<T> (see below)
-            │   ├── input-control/                 # <app-input-control>: label, prefix/suffix icon, clear, loading
-            │   ├── form-error/                    # <app-form-error>
+            │   ├── directives/host-ng-control.directive.ts  # re-provides the wrapper's NgControl to the inner matInput
+            │   ├── input-control/                 # <app-input-control>: label, prefix/suffix icon, clear, loading, <mat-error>
             │   └── validation-messages.token.ts   # VALIDATION_MESSAGES + provideValidationMessages()
-            ├── directives/
-            │   ├── infinite-scroll.directive.ts   # IntersectionObserver, input disabled/rootMargin, output reached
-            │   └── img-loaded.directive.ts        # fade-in + skeleton until load/error
-            └── components/empty-state/
+            └── directives/
+                ├── infinite-scroll.directive.ts   # IntersectionObserver, input disabled/rootMargin, output reached
+                └── img-loaded.directive.ts        # fade-in + skeleton until load/error
 ```
+
+The empty-result and error views live in the page's `results-state` component, not in `shared/`: the search page is their only user. They move up to `shared/ui` only if a second page needs them (rule 2).
 
 ### ABaseInputComponent: the reusable form-control base
 

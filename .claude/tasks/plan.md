@@ -70,7 +70,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 **Checkpoint B: Core flow.** Manual pass with the real key: trending → search → scroll → error states. All e2e pass; review with the owner.
 
 ### Phase 3: Details and actions
-- [ ] T14: GIF details modal
+- [x] T14: GIF details modal
 - [ ] T15: Copy links
 - [ ] T16: Download GIF
 - [ ] T17: Deep link `?gif=<id>`
@@ -104,4 +104,4 @@ The app is small and most tasks share the page and facade files, so execution is
 
 ## Open Questions
 
-- Should there also be a `npm run start:mock` dev mode that serves the e2e fixtures instead of calling Giphy (it saves the API quota during UI work)? It needs no new dependency, but it is outside the spec. **Default: not added unless you say so.**
+None at the moment. (Resolved 2026-10-23: no `npm run start:mock` dev mode that serves the e2e fixtures; it is outside the spec and the API quota has been enough so far.)

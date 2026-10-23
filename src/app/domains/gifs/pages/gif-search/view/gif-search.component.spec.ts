@@ -82,4 +82,14 @@ describe('GifSearchComponent', () => {
 
     expect(harness.routeNativeElement?.textContent).toContain('Nothing found for “zzzz”');
   });
+
+  it('opens the details dialog for a clicked card', async () => {
+    const harness = await RouterTestingHarness.create('/');
+
+    harness.routeNativeElement!.querySelector<HTMLButtonElement>('app-gif-card button')!.click();
+    await harness.fixture.whenStable();
+
+    const title = document.querySelector('mat-dialog-container [mat-dialog-title]');
+    expect(title?.textContent?.trim()).toBe('GIF trend');
+  });
 });
