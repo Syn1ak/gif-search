@@ -114,6 +114,7 @@ gif-search/
         ├── core/                                  # headless only
         │   ├── core.provider.ts                   # router (component input binding), http, icons, theme init
         │   ├── providers/material-symbols.provider.ts  # <mat-icon> uses the Material Symbols font from index.html
+        │   ├── providers/theme.provider.ts        # applies the stored theme on startup
         │   ├── tokens/giphy-config.token.ts       # apiKey, baseUrl, pageSize, offset caps
         │   ├── entities/giphy/
         │   │   ├── gif.dto.ts                     # IGiphyGif, IGiphyImages, IGiphyRendition, IGiphyUser
@@ -132,7 +133,8 @@ gif-search/
         │       └── theme.types.ts
         │
         ├── layout/main-layout/
-        │   ├── components/header/                 # logo, theme toggle
+        │   ├── components/header/                 # logo; defers the theme toggle
+        │   ├── components/theme-toggle/           # Material icon button + tooltip, lazy so it stays out of the initial bundle
         │   ├── components/footer/                 # "Powered by GIPHY"
         │   └── main-layout.component.ts
         │

@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, ThemeToggleComponent],
   template: `
     <header class="sticky top-0 z-10 border-b border-outline-variant/60 bg-surface/80 backdrop-blur-md">
       <div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6">
@@ -19,6 +20,13 @@ import { RouterLink } from '@angular/router';
           </span>
           <span class="text-lg font-semibold tracking-tight">GIF Search</span>
         </a>
+
+        <!-- The theme is already applied (index.html script), so the toggle can load once the page is idle. -->
+        <div class="ms-auto size-10">
+          @defer (on idle) {
+            <app-theme-toggle />
+          }
+        </div>
       </div>
     </header>
   `,

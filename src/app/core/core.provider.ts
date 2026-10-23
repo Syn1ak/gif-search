@@ -4,6 +4,7 @@ import { provideRouter, Routes, withComponentInputBinding } from '@angular/route
 import { giphyApiKeyInterceptor } from './interceptors/giphy-api-key.interceptor';
 import { giphyErrorInterceptor } from './interceptors/giphy-error.interceptor';
 import { provideMaterialSymbols } from './providers/material-symbols.provider';
+import { provideTheme } from './providers/theme.provider';
 
 export type TCoreOptions = {
   routes: Routes;
@@ -15,5 +16,6 @@ export function provideCore({ routes }: TCoreOptions): (Provider | EnvironmentPr
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withFetch(), withInterceptors([giphyApiKeyInterceptor, giphyErrorInterceptor])),
     provideMaterialSymbols(),
+    provideTheme(),
   ];
 }

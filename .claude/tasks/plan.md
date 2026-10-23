@@ -78,7 +78,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 **Checkpoint C: Feature-complete.** US-1 to US-7 and US-9 to US-10 verified; review with the owner.
 
 ### Phase 4: Polish and ship
-- [ ] T18: Theme toggle (system / light / dark)
+- [x] T18: Theme toggle (system / light / dark)
 - [ ] T19: Accessibility, reduced motion, and responsive polish
 - [ ] T20: CI and GitHub Pages workflow
 - [ ] T21: README

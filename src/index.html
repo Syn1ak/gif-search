@@ -6,6 +6,21 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
+    <!-- Applies the saved theme before the app boots, so the page never flashes the wrong one.
+         Mirrors ThemeService.apply() and THEME_STORAGE_KEY (src/app/core). -->
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem('gif-search.theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var root = document.documentElement;
+          root.classList.toggle('light', mode === 'light');
+          root.classList.toggle('dark', mode === 'dark' || (mode !== 'light' && prefersDark));
+        } catch (error) {
+          // Storage unavailable: the OS preference applies until ThemeService takes over.
+        }
+      })();
+    </script>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,7 +30,7 @@
     />
     <!-- Material Symbols subset: keep icon_names in sync with the icons used, sorted alphabetically. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&icon_names=close,content_copy,download,error,hourglass_empty,image_not_supported,key_off,link,open_in_new,refresh,search,search_off,wifi_off&display=block"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&icon_names=brightness_auto,close,content_copy,dark_mode,download,error,hourglass_empty,image_not_supported,key_off,light_mode,link,open_in_new,refresh,search,search_off,wifi_off&display=block"
       rel="stylesheet"
     />
   </head>

@@ -255,8 +255,8 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** `ThemeService` (`core`): a `$mode` signal, persisted in `localStorage` (wrapped in try/catch), that applies `color-scheme` and `.dark` to `<html>` and follows the OS in `system` mode. A header icon button cycles the modes, with a tooltip and `aria-label`. To avoid a flash of the wrong theme, a small inline script in `src/index.html` reads the stored mode and sets `color-scheme` and `.dark` on `<html>` before Angular boots, using the same storage key as `ThemeService`. The theme icons are added to the Material Symbols `icon_names` list there too.
 
 **Acceptance criteria:**
-- [ ] The toggle cycles system → light → dark, the choice survives a reload, and there is no flash of the wrong theme on load.
-- [ ] Service tests cover persistence, unavailable storage, and system-preference changes; e2e covers persistence after reload.
+- [x] The toggle cycles system → light → dark, the choice survives a reload, and there is no flash of the wrong theme on load.
+- [x] Service tests cover persistence, unavailable storage, and system-preference changes; e2e covers persistence after reload.
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T7
