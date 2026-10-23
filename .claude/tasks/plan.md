@@ -79,7 +79,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 
 ### Phase 4: Polish and ship
 - [x] T18: Theme toggle (system / light / dark)
-- [ ] T19: Accessibility, reduced motion, and responsive polish
+- [x] T19: Accessibility, reduced motion, and responsive polish
 - [ ] T20: CI and GitHub Pages workflow
 - [ ] T21: README
 

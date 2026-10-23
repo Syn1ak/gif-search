@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["start"],
       "port": 4200
+    },
+    {
+      "name": "gif-search-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start", "--", "--configuration", "production", "--port", "4400"],
+      "port": 4400
     }
   ]
 }

@@ -267,7 +267,7 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Add the `img-loaded` directive (skeleton until load, fade-in, error placeholder). Under `prefers-reduced-motion` the grid uses still renditions and animates only on hover/focus. Audit focus outlines, headings, and landmarks; check mobile layout and the full-screen dialog; run Lighthouse.
 
 **Acceptance criteria:**
-- [ ] Lighthouse Accessibility ≥ 95 and CLS < 0.1 on the search page (desktop and mobile).
+- [x] Lighthouse Accessibility ≥ 95 and CLS < 0.1 on the search page (desktop and mobile).
 - [x] With reduced motion emulated, the grid shows stills, and hovering or focusing a card animates it (e2e with `reducedMotion: 'reduce'`).
 - [x] No console errors or warnings across the e2e suite.
 

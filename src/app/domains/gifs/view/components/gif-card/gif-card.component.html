@@ -36,7 +36,9 @@
         <mat-icon aria-hidden="true">broken_image</mat-icon>
       </span>
     }
+    <!-- Visual only: the button's aria-label already announces the title. -->
     <span
+      aria-hidden="true"
       class="pointer-events-none absolute inset-x-0 bottom-0 line-clamp-2 bg-linear-to-t from-black/70 to-transparent px-3 pt-8 pb-2.5 text-left text-sm font-medium text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-has-focus-visible:opacity-100"
     >
       {{ $gif().title }}
