@@ -293,8 +293,8 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Write the README: what the app is and the live link placeholder, a feature list with a screenshot or GIF, quick start (key → `.env` → `npm start`), all commands, the one-time GitHub setup (repo, secret, Pages source), an architecture overview (layer map, dependency rules, key decisions AD-1 to AD-9 in short form), the testing approach, the manual smoke checklist, and the note on the client-side key and Giphy terms.
 
 **Acceptance criteria:**
-- [ ] A fresh clone plus the README alone gets a reviewer to a running app and green tests.
-- [ ] Each top-level folder in `src/app` is explained in one line.
+- [x] A fresh clone plus the README alone gets a reviewer to a running app and green tests.
+- [x] Each top-level folder in `src/app` is explained in one line.
 
 **Verification:** follow the README from a clean clone in a temp dir.
 **Dependencies:** T20

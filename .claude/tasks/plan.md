@@ -81,7 +81,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 - [x] T18: Theme toggle (system / light / dark)
 - [x] T19: Accessibility, reduced motion, and responsive polish
 - [x] T20: CI and GitHub Pages workflow
-- [ ] T21: README
+- [x] T21: README
 
 **Checkpoint D: Complete.** Every Success Criterion in the spec is met, and the owner pushes and verifies the deployment.
 
