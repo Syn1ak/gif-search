@@ -277,16 +277,16 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Scope:** M. **Commit:** `feat(ui): polish accessibility, reduced motion and loading states`
 
 ### T20: CI and GitHub Pages workflow
-**Description:** `.github/workflows/deploy.yml`: on push to `main` and PRs, run install → lint → unit tests (with coverage) → Playwright → build with `--base-href /${{ github.event.repository.name }}/` → copy `404.html` → deploy to Pages (main only). The key comes from the `GIPHY_API_KEY` secret. Coverage thresholds (≥ 80% lines for `core/`, `shared/`, `data-access/`) are enforced in the Vitest config.
+**Description:** `.github/workflows/deploy.yml`: on push to `main` and PRs, run install → lint → unit tests (with coverage) → Playwright → build with `--base-href /${{ github.event.repository.name }}/` → copy `404.html` → deploy to Pages (main only). The key comes from the `GIPHY_API_KEY` secret. Coverage thresholds (≥ 80% lines for `core/`, `shared/`, `data-access/`) are enforced in `vitest-base.config.mts`, loaded through `runnerConfig` in `angular.json` (its own `coverageThresholds` option only takes one global value).
 
 **Acceptance criteria:**
-- [ ] The workflow is valid (`actionlint` if available, otherwise a careful review) and mirrors the local commands exactly.
-- [ ] A local production build with a sub-path base-href works under `npx http-server dist/... ` at `/gif-search/`.
-- [ ] Coverage thresholds fail the run when they are not met.
+- [x] The workflow is valid (`actionlint` if available, otherwise a careful review) and mirrors the local commands exactly. (actionlint was not installed: reviewed by hand, and each action's inputs checked against its pinned release.)
+- [x] A local production build with a sub-path base-href works under `npx http-server dist/... ` at `/gif-search/`.
+- [x] Coverage thresholds fail the run when they are not met.
 
 **Verification:** standard trio + `npm run test:coverage`; local sub-path smoke test.
 **Dependencies:** T1–T19
-**Files:** `.github/workflows/deploy.yml`, `vitest` coverage config (in `angular.json`), `package.json`
+**Files:** `.github/workflows/deploy.yml`, `vitest-base.config.mts`, `angular.json`
 **Scope:** S. **Commit:** `ci: add GitHub Actions pipeline with Pages deployment`
 
 ### T21: README

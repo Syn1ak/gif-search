@@ -66,7 +66,7 @@ npm run format              # prettier --write .
 
 **API key handling:** `.env` (gitignored, already created locally) contains `GIPHY_API_KEY=...`. `scripts/write-env.mjs` (run with `node --env-file-if-exists=.env`) generates `environment.generated.ts` (gitignored). The repo commits only `.env.example`. In CI the key comes from the `GIPHY_API_KEY` repository secret. The key still ends up in the public JS bundle; this is inherent to GIPHY's model, which requires client-side calls, and is acceptable for a rate-limited beta key. The README states this explicitly.
 
-**Deploy:** `.github/workflows/deploy.yml` runs lint, unit tests, e2e, and build on every push to `main` and on every pull request (PRs only run the checks and never deploy). The build uses `--base-href /${{ github.event.repository.name }}/` so the repo name does not need to be known upfront. On `main` it then publishes to GitHub Pages and copies `index.html` to `404.html` as the SPA fallback. The README documents the one-time GitHub setup: create the repo, add the `GIPHY_API_KEY` secret, and set Pages → Source → GitHub Actions.
+**Deploy:** `.github/workflows/deploy.yml` runs lint, the format check, unit tests (with coverage thresholds), e2e, and build on every push to `main` and on every pull request (PRs only run the checks and never deploy). The build uses `--base-href /${{ github.event.repository.name }}/` so the repo name does not need to be known upfront. On `main` it then publishes to GitHub Pages and copies `index.html` to `404.html` as the SPA fallback. The README documents the one-time GitHub setup: create the repo, add the `GIPHY_API_KEY` secret, and set Pages → Source → GitHub Actions.
 
 ## Architecture
 
@@ -96,6 +96,7 @@ gif-search/
 ├── scripts/write-env.mjs
 ├── .github/workflows/deploy.yml
 ├── playwright.config.ts
+├── vitest-base.config.mts             # per-folder coverage thresholds (runnerConfig in angular.json)
 ├── e2e/
 │   ├── fixtures/                      # search-page-1.json, search-page-2.json, trending.json, gif-by-id.json
 │   ├── support/giphy-mock.ts          # page.route() helpers (success, empty, 401, 429, offline)
