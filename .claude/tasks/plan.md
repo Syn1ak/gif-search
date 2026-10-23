@@ -59,7 +59,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 **Checkpoint A: Foundation.** Lint, tests, and build pass; the theme renders in light and dark; review with the owner.
 
 ### Phase 2: Search slice
-- [ ] T7: App shell: layout, footer attribution, lazy search route
+- [x] T7: App shell: layout, footer attribution, lazy search route
 - [ ] T8: Trending grid on first load
 - [ ] T9: Playwright setup, Giphy mock, first e2e
 - [ ] T10: Base form-control infrastructure

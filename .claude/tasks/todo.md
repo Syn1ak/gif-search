@@ -97,8 +97,8 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Add `main-layout` with a header (logo and title; the toggle placeholder comes later) and a footer showing "Powered by GIPHY". `app.routes.ts` lazy-loads `gif-search.routes.ts` (`.then((r) => r.ROUTES)`), which lazy-loads the default-exported page component.
 
 **Acceptance criteria:**
-- [ ] `/` renders the layout with the page placeholder inside; the page is in a lazy chunk (visible in the build output).
-- [ ] The footer attribution links to giphy.com.
+- [x] `/` renders the layout with the page placeholder inside; the page is in a lazy chunk (visible in the build output).
+- [x] The footer attribution links to giphy.com.
 
 **Verification:** standard trio; build output shows a lazy chunk.
 **Dependencies:** T2
