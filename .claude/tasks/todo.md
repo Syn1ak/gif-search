@@ -122,8 +122,8 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Add Playwright (Chromium and a Pixel 7 project). `webServer` runs `ng serve`. `e2e/support/giphy-mock.ts` provides `mockTrending`, `mockSearch(pages)`, `mockGifById`, and `mockError(status)`, plus offline handling. Fixture JSON and a tiny local GIF serve the media.
 
 **Acceptance criteria:**
-- [ ] `npm run e2e` and `npm run e2e:ui` work; no request reaches the real `api.giphy.com` (an unmatched route fails the test).
-- [ ] Scenario "first visit shows trending" passes on desktop and mobile.
+- [x] `npm run e2e` and `npm run e2e:ui` work; no request reaches the real `api.giphy.com` (an unmatched route fails the test).
+- [x] Scenario "first visit shows trending" passes on desktop and mobile.
 
 **Verification:** `npm run e2e`; standard trio.
 **Dependencies:** T8

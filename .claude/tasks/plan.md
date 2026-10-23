@@ -61,7 +61,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 ### Phase 2: Search slice
 - [x] T7: App shell: layout, footer attribution, lazy search route
 - [x] T8: Trending grid on first load
-- [ ] T9: Playwright setup, Giphy mock, first e2e
+- [x] T9: Playwright setup, Giphy mock, first e2e
 - [ ] T10: Base form-control infrastructure
 - [ ] T11: Keyword search driven by `?q`
 - [ ] T12: Infinite scroll
