@@ -20,7 +20,7 @@
   } @else if (facade.$items().length) {
     <app-gif-grid
       [items]="facade.$items()"
-      (open)="detailsModal.open($event)"
+      (open)="onOpenDetails($event)"
       (copyLink)="detailsModal.copyMediaLink($event)"
     />
 

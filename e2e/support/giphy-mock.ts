@@ -151,6 +151,25 @@ export class GiphyMock {
     );
   }
 
+  /** Answers `GET /gifs/{id}` with an HTTP error, e.g. 404 for an unknown id. */
+  async gifByIdError(id: string, status: number): Promise<TMockedEndpoint> {
+    return this.answer(
+      `${API_PATH}/${id}`,
+      () => true,
+      (route) =>
+        route.fulfill({
+          status,
+          json: {
+            meta: {
+              status,
+              msg: 'Error',
+              response_id: '',
+            },
+          },
+        }),
+    );
+  }
+
   /** Answers an endpoint with an HTTP error, e.g. 401 (bad key) or 429 (rate limit). */
   async error(endpoint: TListEndpoint, status: number): Promise<TMockedEndpoint> {
     return this.answer(

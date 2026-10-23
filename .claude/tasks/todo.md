@@ -234,9 +234,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Opening the modal sets `?gif=<id>` and closing removes it (AD-1). The page's `gif` input opens the modal. It uses the loaded item when available, otherwise `GifsClient.getById$` (with a loading state in the dialog, and a not-found or error message).
 
 **Acceptance criteria:**
-- [ ] `/?q=cats&gif=<id>` in a fresh tab shows cats results with that modal open.
-- [ ] Closing removes `gif` from the URL; browser Back closes the modal; an unknown id shows "GIF not found".
-- [ ] e2e covers the deep link, back-to-close, and not-found.
+- [x] `/?q=cats&gif=<id>` in a fresh tab shows cats results with that modal open.
+- [x] Closing removes `gif` from the URL; browser Back closes the modal; an unknown id shows "GIF not found".
+- [x] e2e covers the deep link, back-to-close, and not-found.
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T11, T14

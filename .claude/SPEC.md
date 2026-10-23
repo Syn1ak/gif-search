@@ -137,6 +137,7 @@ gif-search/
         │   └── main-layout.component.ts
         │
         ├── domains/gifs/
+        │   ├── constants/error-messages.constants.ts  # per-error title/hint/retry, shared by the page and the dialog
         │   ├── models/gif.types.ts                # TGif (client view model), TGifAuthor
         │   ├── utils/gif.mapper.ts                # IGiphyGif → TGif (date sanitising, alt fallback, rendition picking)
         │   ├── view/components/gif-card/          # presentational: input gif, outputs open/copy
@@ -149,7 +150,7 @@ gif-search/
         │   │   │   └── gif-meta-list/
         │   │   └── view/pipes/file-size.pipe.ts
         │   └── pages/gif-search/
-        │       ├── constants/                     # search limits, per-error messages
+        │       ├── constants/                     # search limits
         │       ├── models/gif-search.types.ts     # page state, results state
         │       ├── utils/masonry-columns.ts       # shortest-column distribution (AD-4)
         │       ├── data-access/facades/gif-search.facade.ts   # query, items, pagination, status, error

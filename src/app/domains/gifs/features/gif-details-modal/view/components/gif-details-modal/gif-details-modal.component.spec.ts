@@ -4,6 +4,11 @@ import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { buildGif } from '../../../../../../../../testing/gif-builders';
+import { buildGifDto } from '../../../../../../../../testing/giphy-builders';
+import { IGiphyGif } from '../../../../../../../core/entities/giphy/gif.dto';
+import { IGiphySingleResponse } from '../../../../../../../core/entities/giphy/giphy-response.dto';
+import { GiphyApiError } from '../../../../../../../core/models/giphy-error';
+import { GifsClient } from '../../../../../../../core/services/api/giphy/gifs.client';
 import { TGif } from '../../../../../models/gif.types';
 import { GifDetailsModalFacade } from '../../../data-access/facades/gif-details-modal.facade';
 import { GifActionsService } from '../../../data-access/services/gif-actions.service';
@@ -15,9 +20,11 @@ describe('GifDetailsModalComponent', () => {
     download$: ReturnType<typeof vi.fn>;
   };
   let download$: Subject<void>;
+  let byId$: Subject<IGiphySingleResponse<IGiphyGif>>;
 
   beforeEach(() => {
     download$ = new Subject<void>();
+    byId$ = new Subject();
     gifActions = {
       copyMediaLink: vi.fn(),
       copyPageLink: vi.fn(),
@@ -30,6 +37,10 @@ describe('GifDetailsModalComponent', () => {
           provide: GifActionsService,
           useValue: gifActions,
         },
+        {
+          provide: GifsClient,
+          useValue: { getById$: () => byId$ },
+        },
         // Closing then completes at once instead of waiting for the exit animation.
         {
           provide: MATERIAL_ANIMATIONS,
@@ -39,12 +50,21 @@ describe('GifDetailsModalComponent', () => {
     });
   });
 
+  const settle = () => TestBed.inject(ApplicationRef).whenStable();
+
   /** Opens the real dialog through the facade and returns its container. */
   async function openDialog(gif: TGif): Promise<HTMLElement> {
-    TestBed.inject(GifDetailsModalFacade).open(gif);
-    await TestBed.inject(ApplicationRef).whenStable();
+    return openById(gif.id, gif);
+  }
+
+  /** Opens the dialog by id; without a GIF, it is loaded through the mocked client. */
+  async function openById(id: string, gif: TGif | null = null): Promise<HTMLElement> {
+    TestBed.inject(GifDetailsModalFacade).open(id, gif);
+    await settle();
     return document.querySelector<HTMLElement>('mat-dialog-container')!;
   }
+
+  const titleOf = (container: HTMLElement) => container.querySelector('[mat-dialog-title]');
 
   /** The `<dd>` that follows the `<dt>` with the given label. */
   function detail(container: HTMLElement, label: string): HTMLElement {
@@ -118,7 +138,6 @@ describe('GifDetailsModalComponent', () => {
   it('downloads the GIF, showing a spinner and staying focusable but disabled meanwhile', async () => {
     const gif = buildGif();
     const container = await openDialog(gif);
-    const settle = () => TestBed.inject(ApplicationRef).whenStable();
 
     actionButton(container, 'Download').click();
     await settle();
@@ -179,5 +198,51 @@ describe('GifDetailsModalComponent', () => {
     await TestBed.inject(ApplicationRef).whenStable();
 
     expect(TestBed.inject(MatDialog).openDialogs).toHaveLength(0);
+  });
+
+  it('shows a labelled loading state while a GIF opened by id loads, then the GIF', async () => {
+    const container = await openById('remote');
+
+    expect(titleOf(container)!.textContent?.trim()).toBe('Loading GIF…');
+    expect(container.getAttribute('aria-labelledby')).toBe(titleOf(container)!.id);
+    expect(container.querySelector('[role="status"] mat-progress-spinner')).not.toBeNull();
+
+    byId$.next({
+      data: buildGifDto('remote'),
+      meta: {
+        status: 200,
+        msg: 'OK',
+        response_id: 'r',
+      },
+    });
+    await settle();
+
+    expect(titleOf(container)!.textContent?.trim()).toBe('GIF remote');
+    expect(container.getAttribute('aria-labelledby')).toBe(titleOf(container)!.id);
+  });
+
+  it('says when the GIF does not exist, without offering a retry', async () => {
+    const container = await openById('missing');
+
+    byId$.error(new GiphyApiError('unknown', 404, 'Not Found'));
+    await settle();
+
+    expect(titleOf(container)!.textContent?.trim()).toBe('GIF not found');
+    expect(container.querySelector('[role="alert"]')!.textContent).toContain('removed from GIPHY');
+    expect(container.querySelector('mat-dialog-actions')).toBeNull();
+  });
+
+  it('explains other failures and retries them', async () => {
+    const container = await openById('remote');
+    byId$.error(new GiphyApiError('network', 0, 'Offline'));
+    await settle();
+
+    expect(titleOf(container)!.textContent?.trim()).toBe('You seem to be offline');
+
+    byId$ = new Subject();
+    actionButton(container, 'Try again').click();
+    await settle();
+
+    expect(titleOf(container)!.textContent?.trim()).toBe('Loading GIF…');
   });
 });

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { ERROR_MESSAGES } from '../../../constants/error-messages.constants';
+import { ERROR_MESSAGES } from '../../../../../constants/error-messages.constants';
 import { TResultsState } from '../../../models/gif-search.types';
 
 /** Shown in place of the grid: an empty search result or a failed request. */

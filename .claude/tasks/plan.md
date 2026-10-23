@@ -73,7 +73,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 - [x] T14: GIF details modal
 - [x] T15: Copy links
 - [x] T16: Download GIF
-- [ ] T17: Deep link `?gif=<id>`
+- [x] T17: Deep link `?gif=<id>`
 
 **Checkpoint C: Feature-complete.** US-1 to US-7 and US-9 to US-10 verified; review with the owner.
 

@@ -1,4 +1,4 @@
-import { TGiphyErrorKind } from '../../../../../core/models/giphy-error';
+import { TGiphyErrorKind } from '../../../core/models/giphy-error';
 
 export type TErrorMessage = {
   icon: string;
