@@ -93,6 +93,25 @@ export class GifSearchFacade {
     });
   }
 
+  /** Repeats the request that failed: the first page, or the page that was being appended. */
+  retry(): void {
+    const { status, query, offset, items } = this.$state();
+
+    if (status !== 'error') {
+      return;
+    }
+
+    this.$state.update((state) => ({
+      ...state,
+      status: items.length ? 'loading-more' : 'loading',
+      error: null,
+    }));
+    this.request$.next({
+      query,
+      offset,
+    });
+  }
+
   private fetchPage$({ query, offset }: TPageRequest): Observable<TStateUpdate> {
     const page$ = query
       ? this.gifsClient.search$({

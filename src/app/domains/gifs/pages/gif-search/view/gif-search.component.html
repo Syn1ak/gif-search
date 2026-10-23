@@ -15,37 +15,40 @@
 <section aria-labelledby="results-heading">
   <h2 id="results-heading" class="mb-4 text-xl font-semibold" aria-live="polite">{{ $heading() }}</h2>
 
-  @switch (facade.$status()) {
-    @case ('loading') {
-      <app-grid-skeleton />
-    }
-    @case ('error') {
-      <p role="alert" class="rounded-card bg-error-container p-4 text-on-error-container">
-        Could not load GIFs. Please try again later.
-      </p>
-    }
-    @default {
-      @if (facade.$items().length) {
-        <app-gif-grid [items]="facade.$items()" />
+  @if (facade.$status() === 'loading') {
+    <app-grid-skeleton />
+  } @else if (facade.$items().length) {
+    <app-gif-grid [items]="facade.$items()" />
 
-        <div
-          aria-hidden="true"
-          appInfiniteScroll
-          [infiniteScrollDisabled]="!facade.$canLoadMore()"
-          (scrolledToEnd)="facade.loadMore()"
-        ></div>
+    <div
+      aria-hidden="true"
+      appInfiniteScroll
+      [infiniteScrollDisabled]="!facade.$canLoadMore()"
+      (scrolledToEnd)="facade.loadMore()"
+    ></div>
 
-        @if (facade.$status() === 'loading-more') {
-          <div role="status" class="flex items-center justify-center gap-3 py-8 text-on-surface-variant">
-            <mat-progress-spinner mode="indeterminate" diameter="24" />
-            Loading more GIFs…
-          </div>
-        } @else if (!facade.$hasMore()) {
-          <p class="py-8 text-center text-sm text-on-surface-variant">End of results</p>
+    @if (facade.$status() === 'loading-more') {
+      <div role="status" class="flex items-center justify-center gap-3 py-8 text-on-surface-variant">
+        <mat-progress-spinner mode="indeterminate" diameter="24" />
+        Loading more GIFs…
+      </div>
+    } @else if ($loadMoreError(); as error) {
+      <div
+        role="alert"
+        class="mx-auto my-8 flex max-w-xl flex-col items-center gap-3 rounded-card bg-error-container px-4 py-3 text-on-error-container sm:flex-row sm:justify-between"
+      >
+        <span class="flex items-center gap-2">
+          <mat-icon aria-hidden="true">{{ error.icon }}</mat-icon>
+          Couldn’t load more GIFs. {{ error.title }}.
+        </span>
+        @if (error.retryable) {
+          <button matButton type="button" (click)="facade.retry()">Try again</button>
         }
-      } @else if (facade.$mode() === 'search') {
-        <app-results-state [query]="facade.$query()" />
-      }
+      </div>
+    } @else if (!facade.$hasMore()) {
+      <p class="py-8 text-center text-sm text-on-surface-variant">End of results</p>
     }
+  } @else if ($resultsState(); as state) {
+    <app-results-state [state]="state" (retry)="facade.retry()" />
   }
 </section>

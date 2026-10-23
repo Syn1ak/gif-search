@@ -173,9 +173,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** `results-state` renders a state per `TGiphyError`: unauthorized ("API key is missing or invalid"), rate-limited, network/unknown with **Retry**. `facade.retry()` re-runs the last request (first page or load-more).
 
 **Acceptance criteria:**
-- [ ] Each error type shows its message; Retry re-requests and recovers.
-- [ ] A failed load-more keeps the already loaded items and shows an inline retry under the grid.
-- [ ] e2e covers 401, 429, and offline → retry.
+- [x] Each error type shows its message; Retry re-requests and recovers.
+- [x] A failed load-more keeps the already loaded items and shows an inline retry under the grid.
+- [x] e2e covers 401, 429, and offline → retry.
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T5, T12

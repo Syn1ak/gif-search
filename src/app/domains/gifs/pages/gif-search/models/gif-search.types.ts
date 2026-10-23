@@ -14,3 +14,14 @@ export type TGifSearchState = {
   status: TGifSearchStatus;
   error: TGiphyErrorKind | null;
 };
+
+/** What to show instead of the grid. */
+export type TResultsState =
+  | {
+      kind: 'empty';
+      query: string;
+    }
+  | {
+      kind: 'error';
+      error: TGiphyErrorKind;
+    };

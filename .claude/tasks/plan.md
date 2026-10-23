@@ -65,7 +65,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 - [x] T10: Base form-control infrastructure
 - [x] T11: Keyword search driven by `?q`
 - [x] T12: Infinite scroll
-- [ ] T13: Error states and retry
+- [x] T13: Error states and retry
 
 **Checkpoint B: Core flow.** Manual pass with the real key: trending → search → scroll → error states. All e2e pass; review with the owner.
 

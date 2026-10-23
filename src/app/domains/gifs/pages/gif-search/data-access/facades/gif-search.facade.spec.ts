@@ -204,4 +204,52 @@ describe('GifSearchFacade', () => {
       expect(ids()).toEqual(['c0', 'c1']);
     });
   });
+
+  describe('retry', () => {
+    const failure = () => throwError(() => new GiphyApiError('network', 0, 'Offline'));
+
+    it('re-requests the first page after it failed', () => {
+      client.trending$.mockReturnValueOnce(failure());
+      facade.search('');
+      expect(facade.$status()).toBe('error');
+
+      const retry$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      client.trending$.mockReturnValue(retry$);
+      facade.retry();
+
+      expect(client.trending$).toHaveBeenLastCalledWith({ offset: 0 });
+      expect(facade.$status()).toBe('loading');
+      expect(facade.$error()).toBeNull();
+
+      retry$.next(listResponse([gifDto('a')]));
+      expect(facade.$items().map((gif) => gif.id)).toEqual(['a']);
+    });
+
+    it('keeps the loaded GIFs when the next page fails and retries that page', () => {
+      facade.search('');
+      trending$.next(listResponse([gifDto('a'), gifDto('b')]));
+      client.trending$.mockReturnValueOnce(failure());
+
+      facade.loadMore();
+
+      expect(facade.$status()).toBe('error');
+      expect(facade.$items().map((gif) => gif.id)).toEqual(['a', 'b']);
+      expect(facade.$canLoadMore()).toBe(false);
+
+      client.trending$.mockReturnValue(new Subject());
+      facade.retry();
+
+      expect(client.trending$).toHaveBeenLastCalledWith({ offset: 2 });
+      expect(facade.$status()).toBe('loading-more');
+    });
+
+    it('does nothing when the last request did not fail', () => {
+      facade.search('');
+      trending$.next(listResponse([gifDto('a')]));
+
+      facade.retry();
+
+      expect(client.trending$).toHaveBeenCalledTimes(1);
+    });
+  });
 });
