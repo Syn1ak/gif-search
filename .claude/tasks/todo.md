@@ -109,9 +109,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** `GifSearchFacade` (route-scoped) gets trending mode: it loads page 1 of trending and exposes `$items`, `$status`, and `$mode`. Presentational `gif-card` (domain `view/`) and `gif-grid` (masonry by shortest column, see AD-4) plus `grid-skeleton` render it under a "Trending now" heading.
 
 **Acceptance criteria:**
-- [ ] Opening the app shows a skeleton, then 30 trending GIFs in a 2/3/4/5-column masonry with no layout shift.
-- [ ] Cards are `<button>`s with alt text; images have width/height and `loading="lazy"`.
-- [ ] Facade tests (mocked client) cover loading → success and the mapping to `TGif`; there is a unit test for the column-distribution function.
+- [x] Opening the app shows a skeleton, then 30 trending GIFs in a 2/3/4/5-column masonry with no layout shift.
+- [x] Cards are `<button>`s with alt text; images have width/height and `loading="lazy"`.
+- [x] Facade tests (mocked client) cover loading → success and the mapping to `TGif`; there is a unit test for the column-distribution function.
 
 **Verification:** standard trio; manual check with the real key (1 API call).
 **Dependencies:** T4, T6, T7

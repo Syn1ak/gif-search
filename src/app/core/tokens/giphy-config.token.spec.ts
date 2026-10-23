@@ -12,7 +12,10 @@ describe('GIPHY_CONFIG', () => {
       pageSize: 30,
       rating: 'g',
       lang: 'en',
-      offsetCap: { search: 4999, trending: 499 },
+      offsetCap: {
+        search: 4999,
+        trending: 499,
+      },
     });
   });
 });

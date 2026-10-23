@@ -63,7 +63,11 @@ function toPreview(images: IGiphyImages): TGifPreview | null {
     const size = toSize(rendition);
 
     if (url && size) {
-      return { url, stillUrl: images[stillName]?.url ?? rendition?.url ?? url, ...size };
+      return {
+        url,
+        stillUrl: images[stillName]?.url ?? rendition?.url ?? url,
+        ...size,
+      };
     }
   }
 
@@ -80,7 +84,16 @@ function toAuthor(user: IGiphyUser | undefined, username: string): TGifAuthor | 
     };
   }
 
-  return username ? { name: username, username, avatarUrl: null, profileUrl: null } : null;
+  if (!username) {
+    return null;
+  }
+
+  return {
+    name: username,
+    username,
+    avatarUrl: null,
+    profileUrl: null,
+  };
 }
 
 /** Giphy dates look like `2024-05-17 10:20:30` (UTC), or `0000-00-00 00:00:00` when unknown. */
@@ -97,7 +110,14 @@ function toSize(rendition: IGiphyRendition | undefined): { width: number; height
   const width = toPositiveNumber(rendition?.width);
   const height = toPositiveNumber(rendition?.height);
 
-  return width && height ? { width, height } : null;
+  if (!width || !height) {
+    return null;
+  }
+
+  return {
+    width,
+    height,
+  };
 }
 
 function toPositiveNumber(value: string | undefined): number | null {

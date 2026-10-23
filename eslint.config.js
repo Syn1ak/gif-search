@@ -3,6 +3,7 @@ const eslint = require('@eslint/js');
 const { defineConfig } = require('eslint/config');
 const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
+const stylistic = require('@stylistic/eslint-plugin');
 
 module.exports = defineConfig([
   {
@@ -14,6 +15,7 @@ module.exports = defineConfig([
       angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
+    plugins: { '@stylistic': stylistic },
     rules: {
       '@angular-eslint/directive-selector': [
         'error',
@@ -25,10 +27,26 @@ module.exports = defineConfig([
       ],
       '@angular-eslint/prefer-on-push-component-change-detection': 'error',
       '@angular-eslint/prefer-signals': 'error',
+      // Signal inputs/outputs carry the `$` prefix and are aliased to their public name (`$gif` → `gif`).
+      '@angular-eslint/no-input-rename': 'off',
+      '@angular-eslint/no-output-rename': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      // Object literals with two or more properties are expanded. Prettier then puts every property on
+      // its own line and keeps the object expanded (objectWrap: "preserve"), so the two tools agree.
+      '@stylistic/object-curly-newline': [
+        'error',
+        {
+          ObjectExpression: { minProperties: 2, multiline: true, consistent: true },
+          ObjectPattern: { consistent: true },
+          ImportDeclaration: { consistent: true },
+          ExportDeclaration: { consistent: true },
+          TSTypeLiteral: { consistent: true },
+          TSInterfaceBody: { consistent: true },
+        },
+      ],
     },
   },
   {

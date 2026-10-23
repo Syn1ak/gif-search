@@ -16,7 +16,10 @@ describe('giphyErrorInterceptor', () => {
       providers: [
         provideHttpClient(withInterceptors([giphyErrorInterceptor])),
         provideHttpClientTesting(),
-        { provide: GIPHY_CONFIG, useValue: { baseUrl: 'https://api.giphy.test/v1' } },
+        {
+          provide: GIPHY_CONFIG,
+          useValue: { baseUrl: 'https://api.giphy.test/v1' },
+        },
       ],
     });
     httpClient = TestBed.inject(HttpClient);
@@ -28,8 +31,14 @@ describe('giphyErrorInterceptor', () => {
   function request(url = API_URL): { error: () => unknown; body: () => unknown } {
     let error: unknown;
     let body: unknown;
-    httpClient.get(url).subscribe({ next: (value) => (body = value), error: (value) => (error = value) });
-    return { error: () => error, body: () => body };
+    httpClient.get(url).subscribe({
+      next: (value) => (body = value),
+      error: (value) => (error = value),
+    });
+    return {
+      error: () => error,
+      body: () => body,
+    };
   }
 
   it.each<[number, TGiphyErrorKind]>([
@@ -41,10 +50,24 @@ describe('giphyErrorInterceptor', () => {
   ])('maps HTTP %i to "%s"', (status, kind) => {
     const result = request();
 
-    http.expectOne(API_URL).flush({ meta: { status, msg: 'Nope' } }, { status, statusText: 'Nope' });
+    http.expectOne(API_URL).flush(
+      {
+        meta: {
+          status,
+          msg: 'Nope',
+        },
+      },
+      {
+        status,
+        statusText: 'Nope',
+      },
+    );
 
     expect(result.error()).toBeInstanceOf(GiphyApiError);
-    expect(result.error()).toMatchObject({ kind, status });
+    expect(result.error()).toMatchObject({
+      kind,
+      status,
+    });
   });
 
   it('maps a failed connection to "network"', () => {
@@ -52,21 +75,41 @@ describe('giphyErrorInterceptor', () => {
 
     http.expectOne(API_URL).error(new ProgressEvent('error'));
 
-    expect(result.error()).toMatchObject({ kind: 'network', status: 0 });
+    expect(result.error()).toMatchObject({
+      kind: 'network',
+      status: 0,
+    });
   });
 
   it('treats a 200 "synthetic" response with an empty response_id as an error', () => {
     const result = request();
 
-    http.expectOne(API_URL).flush({ data: [], meta: { status: 200, msg: 'OK', response_id: '' } });
+    http.expectOne(API_URL).flush({
+      data: [],
+      meta: {
+        status: 200,
+        msg: 'OK',
+        response_id: '',
+      },
+    });
 
     expect(result.body()).toBeUndefined();
-    expect(result.error()).toMatchObject({ kind: 'unknown', status: 200 });
+    expect(result.error()).toMatchObject({
+      kind: 'unknown',
+      status: 200,
+    });
   });
 
   it('passes a regular successful response through', () => {
     const result = request();
-    const body = { data: [], meta: { status: 200, msg: 'OK', response_id: 'abc' } };
+    const body = {
+      data: [],
+      meta: {
+        status: 200,
+        msg: 'OK',
+        response_id: 'abc',
+      },
+    };
 
     http.expectOne(API_URL).flush(body);
 
@@ -78,7 +121,10 @@ describe('giphyErrorInterceptor', () => {
     const url = 'https://media.giphy.test/media/abc/giphy.gif';
     const result = request(url);
 
-    http.expectOne(url).flush(null, { status: 404, statusText: 'Not Found' });
+    http.expectOne(url).flush(null, {
+      status: 404,
+      statusText: 'Not Found',
+    });
 
     expect(result.error()).toBeInstanceOf(HttpErrorResponse);
   });

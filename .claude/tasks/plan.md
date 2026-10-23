@@ -24,7 +24,7 @@ The app is built bottom-up through **vertical slices**. The first phase lays dow
 | AD-1 | **URL is the source of truth for the query and the open GIF.** The search form emits a query, the page calls `router.navigate({ queryParams: { q } })`, and the route's `q` input (`withComponentInputBinding`) drives `facade.search()`. Same for `gif`. | One-directional flow. Back/forward, reload, and deep links come for free, and there is no two-way sync bug class. |
 | AD-2 | **Facades hold state in signals and orchestrate with RxJS.** Requests go through `Subject → switchMap → client`, and results are written into a private `$state` signal. Only read-only `computed` is exposed. | Signals for rendering, RxJS for cancellation, debounce, and retry; each tool does what it is good at. |
 | AD-3 | **Facades are route-scoped**, provided in `gif-search.routes.ts`, and subscribe with `takeUntilDestroyed(inject(DestroyRef))`. | State lives exactly as long as the page; nothing leaks from a root injector, which matches the "no `toSignal` in root services" rule. |
-| AD-4 | **Masonry uses JS column distribution, not CSS `columns`.** A `computed` splits items into N columns (N from CDK `BreakpointObserver`), each new item going to the currently shortest column, with heights taken from Giphy's `fixed_width` width/height. | CSS columns reflow the whole grid on every infinite-scroll append, so items jump between columns. This approach is stable on append, keeps row-wise reading order, and has no CLS. |
+| AD-4 | **Masonry uses JS column distribution, not CSS `columns`.** A `computed` splits items into N columns (N from CDK `BreakpointObserver`), each new item going to the currently shortest column, with heights taken from Giphy's `fixed_width` width/height. | CSS columns reflow the whole grid on every infinite-scroll append, so items jump between columns. This approach is stable on append and has no CLS. Trade-off: DOM and tab order run per column rather than row by row. |
 | AD-5 | **`core` owns transport concerns**: an interceptor appends `api_key` only for `api.giphy.com`, and a second interceptor normalises errors (including synthetic 200 responses) into a typed `TGiphyError`. | Clients stay pure URL builders, and the UI switches on one error union type. |
 | AD-6 | **The API key comes from `.env`** via `scripts/write-env.mjs` → `environment.generated.ts` (gitignored). A missing key produces an empty string and a console warning, and the UI shows the "unauthorized" state. | The build never breaks on a fresh clone, and the failure mode is visible and self-explaining. |
 | AD-7 | **Tailwind v4 in plain CSS and the Material theme in SCSS**, with Material system tokens (`--mat-sys-*`) mapped into Tailwind `@theme`. Dark mode is driven by `color-scheme` on `<html>` plus a `.dark` class for the Tailwind variant. | This avoids running Tailwind through Sass, and gives one palette for both systems. |
@@ -60,7 +60,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 
 ### Phase 2: Search slice
 - [x] T7: App shell: layout, footer attribution, lazy search route
-- [ ] T8: Trending grid on first load
+- [x] T8: Trending grid on first load
 - [ ] T9: Playwright setup, Giphy mock, first e2e
 - [ ] T10: Base form-control infrastructure
 - [ ] T11: Keyword search driven by `?q`

@@ -15,7 +15,13 @@ export class GifsClient {
     const { pageSize, rating, lang } = this.config;
 
     return this.http.get<IGiphyListResponse<IGiphyGif>>(this.url('gifs/search'), {
-      params: { q, offset, limit: pageSize, rating, lang },
+      params: {
+        q,
+        offset,
+        limit: pageSize,
+        rating,
+        lang,
+      },
     });
   }
 
@@ -23,7 +29,11 @@ export class GifsClient {
     const { pageSize, rating } = this.config;
 
     return this.http.get<IGiphyListResponse<IGiphyGif>>(this.url('gifs/trending'), {
-      params: { offset, limit: pageSize, rating },
+      params: {
+        offset,
+        limit: pageSize,
+        rating,
+      },
     });
   }
 

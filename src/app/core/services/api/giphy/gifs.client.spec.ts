@@ -11,7 +11,10 @@ const CONFIG: TGiphyConfig = {
   pageSize: 30,
   rating: 'g',
   lang: 'en',
-  offsetCap: { search: 4999, trending: 499 },
+  offsetCap: {
+    search: 4999,
+    trending: 499,
+  },
 };
 
 describe('GifsClient', () => {
@@ -23,7 +26,10 @@ describe('GifsClient', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: GIPHY_CONFIG, useValue: CONFIG },
+        {
+          provide: GIPHY_CONFIG,
+          useValue: CONFIG,
+        },
       ],
     });
     client = TestBed.inject(GifsClient);
@@ -33,7 +39,12 @@ describe('GifsClient', () => {
   afterEach(() => http.verify());
 
   it('searches with the query, page and configured limits', () => {
-    client.search$({ q: 'happy cats', offset: 60 }).subscribe();
+    client
+      .search$({
+        q: 'happy cats',
+        offset: 60,
+      })
+      .subscribe();
 
     const req = http.expectOne((r) => r.url === 'https://api.giphy.test/v1/gifs/search');
     expect(req.request.method).toBe('GET');
@@ -44,8 +55,15 @@ describe('GifsClient', () => {
     expect(req.request.params.get('lang')).toBe('en');
     req.flush({
       data: [],
-      pagination: { offset: 60, count: 0 },
-      meta: { status: 200, msg: 'OK', response_id: 'x' },
+      pagination: {
+        offset: 60,
+        count: 0,
+      },
+      meta: {
+        status: 200,
+        msg: 'OK',
+        response_id: 'x',
+      },
     });
   });
 
@@ -56,8 +74,15 @@ describe('GifsClient', () => {
     expect(req.request.params.keys().sort()).toEqual(['limit', 'offset', 'rating']);
     req.flush({
       data: [],
-      pagination: { offset: 0, count: 0 },
-      meta: { status: 200, msg: 'OK', response_id: 'x' },
+      pagination: {
+        offset: 0,
+        count: 0,
+      },
+      meta: {
+        status: 200,
+        msg: 'OK',
+        response_id: 'x',
+      },
     });
   });
 
@@ -66,7 +91,14 @@ describe('GifsClient', () => {
     client.getById$('abc/123').subscribe((response) => (title = response.data.title));
 
     const req = http.expectOne('https://api.giphy.test/v1/gifs/abc%2F123');
-    req.flush({ data: { title: 'Hello' }, meta: { status: 200, msg: 'OK', response_id: 'x' } });
+    req.flush({
+      data: { title: 'Hello' },
+      meta: {
+        status: 200,
+        msg: 'OK',
+        response_id: 'x',
+      },
+    });
     expect(title).toBe('Hello');
   });
 });

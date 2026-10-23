@@ -13,7 +13,13 @@ describe('giphyApiKeyInterceptor', () => {
       providers: [
         provideHttpClient(withInterceptors([giphyApiKeyInterceptor])),
         provideHttpClientTesting(),
-        { provide: GIPHY_CONFIG, useValue: { apiKey: 'secret', baseUrl: 'https://api.giphy.test/v1' } },
+        {
+          provide: GIPHY_CONFIG,
+          useValue: {
+            apiKey: 'secret',
+            baseUrl: 'https://api.giphy.test/v1',
+          },
+        },
       ],
     });
     httpClient = TestBed.inject(HttpClient);

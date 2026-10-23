@@ -60,6 +60,7 @@ npm run test:coverage       # ng test --coverage
 npm run e2e                 # playwright test (starts ng serve automatically, API mocked)
 npm run e2e:ui              # playwright test --ui (interactive runner)
 npm run lint                # ng lint
+npm run lint:fix            # ng lint --fix
 npm run format              # prettier --write .
 ```
 
@@ -197,6 +198,7 @@ This is an abstract base class that every form control extends. It shows Control
   - Use `toSignal` / `toObservable` only in components, never in services, to avoid leaks.
 - **Class member order:** constants → injected deps → inputs/outputs/queries → reactive state (signals, computed, observables) → plain properties → constructor → lifecycle hooks → getters → public methods → private methods.
 - **Prettier:** single quotes, 2-space indent, 110-char line width.
+- **Object literals:** two or more properties means one property per line (`@stylistic/object-curly-newline` expands the object, Prettier puts each property on its own line; autofixed by `npm run lint:fix`). Destructuring and imports are not affected.
 
 ```typescript
 @Injectable()
@@ -221,8 +223,16 @@ export class GifSearchFacade {
 
   search(query: string): void {
     const q = query.trim();
-    this.$state.set({ ...INITIAL_STATE, query: q, mode: q ? 'search' : 'trending', status: 'loading' });
-    this.request$.next({ q, offset: 0 });
+    this.$state.set({
+      ...INITIAL_STATE,
+      query: q,
+      mode: q ? 'search' : 'trending',
+      status: 'loading',
+    });
+    this.request$.next({
+      query: q,
+      offset: 0,
+    });
   }
 
   loadMore(): void { /* guards: $hasMore, status !== 'loading' */ }
@@ -256,7 +266,7 @@ export class GifSearchFacade {
   - Mock the network in all automated tests.
   - Check the Angular CLI MCP (`get_best_practices`, `search_documentation`) before using an API you are unsure about.
 - **Ask first:**
-  - Adding any dependency beyond Angular/Material/CDK, Tailwind, angular-eslint, Prettier, Vitest, Playwright.
+  - Adding any dependency beyond Angular/Material/CDK, Tailwind, angular-eslint, @stylistic/eslint-plugin, Prettier, Vitest, Playwright.
   - Changing the deploy workflow.
   - Adding features outside this spec.
   - Deviating from the architecture rules (for example, a store library instead of signal facades).

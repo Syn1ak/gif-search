@@ -4,3 +4,21 @@
     Search millions of GIFs, open the details, copy a link or download it.
   </p>
 </section>
+
+<section aria-labelledby="results-heading">
+  <h2 id="results-heading" class="mb-4 text-xl font-semibold">Trending now</h2>
+
+  @switch (facade.$status()) {
+    @case ('loading') {
+      <app-grid-skeleton />
+    }
+    @case ('error') {
+      <p role="alert" class="rounded-card bg-error-container p-4 text-on-error-container">
+        Could not load GIFs. Please try again later.
+      </p>
+    }
+    @default {
+      <app-gif-grid [items]="facade.$items()" />
+    }
+  }
+</section>

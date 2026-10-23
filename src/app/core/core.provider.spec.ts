@@ -16,7 +16,13 @@ describe('provideCore', () => {
       providers: [
         provideCore({ routes: [] }),
         provideHttpClientTesting(),
-        { provide: GIPHY_CONFIG, useValue: { apiKey: 'secret', baseUrl: 'https://api.giphy.test/v1' } },
+        {
+          provide: GIPHY_CONFIG,
+          useValue: {
+            apiKey: 'secret',
+            baseUrl: 'https://api.giphy.test/v1',
+          },
+        },
       ],
     });
     httpClient = TestBed.inject(HttpClient);
@@ -39,7 +45,10 @@ describe('provideCore', () => {
 
     http
       .expectOne((r) => r.url === TRENDING_URL)
-      .flush(null, { status: 429, statusText: 'Too Many Requests' });
+      .flush(null, {
+        status: 429,
+        statusText: 'Too Many Requests',
+      });
 
     expect(error).toBeInstanceOf(GiphyApiError);
     expect(error).toMatchObject({ kind: 'rate-limited' });
