@@ -112,7 +112,7 @@ gif-search/
         ├── app.component.ts           # <app-main-layout>
         │
         ├── core/                                  # headless only
-        │   ├── core.provider.ts                   # router (component input binding, view transitions), http, zoneless, theme init
+        │   ├── core.provider.ts                   # router (component input binding), http, icons, theme init
         │   ├── tokens/giphy-config.token.ts       # apiKey, baseUrl, pageSize, offset caps
         │   ├── entities/giphy/
         │   │   ├── gif.dto.ts                     # IGiphyGif, IGiphyImages, IGiphyRendition, IGiphyUser

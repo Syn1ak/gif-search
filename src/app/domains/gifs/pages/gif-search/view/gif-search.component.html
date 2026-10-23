@@ -3,10 +3,17 @@
   <p class="mt-3 text-base text-on-surface-variant sm:text-lg">
     Search millions of GIFs, open the details, copy a link or download it.
   </p>
+  <div class="mt-6 text-left">
+    <app-search-form
+      [query]="facade.$query()"
+      [loading]="facade.$status() === 'loading'"
+      (querySubmit)="onSearch($event)"
+    />
+  </div>
 </section>
 
 <section aria-labelledby="results-heading">
-  <h2 id="results-heading" class="mb-4 text-xl font-semibold">Trending now</h2>
+  <h2 id="results-heading" class="mb-4 text-xl font-semibold" aria-live="polite">{{ $heading() }}</h2>
 
   @switch (facade.$status()) {
     @case ('loading') {
@@ -18,7 +25,11 @@
       </p>
     }
     @default {
-      <app-gif-grid [items]="facade.$items()" />
+      @if (facade.$items().length) {
+        <app-gif-grid [items]="facade.$items()" />
+      } @else if (facade.$mode() === 'search') {
+        <app-results-state [query]="facade.$query()" />
+      }
     }
   }
 </section>

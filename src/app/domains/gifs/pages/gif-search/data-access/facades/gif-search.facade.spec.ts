@@ -4,46 +4,11 @@ import { IGiphyGif } from '../../../../../../core/entities/giphy/gif.dto';
 import { IGiphyListResponse } from '../../../../../../core/entities/giphy/giphy-response.dto';
 import { GiphyApiError } from '../../../../../../core/models/giphy-error';
 import { GifsClient } from '../../../../../../core/services/api/giphy/gifs.client';
+import {
+  buildGifDto as gifDto,
+  buildListResponse as listResponse,
+} from '../../../../../../../testing/giphy-builders';
 import { GifSearchFacade } from './gif-search.facade';
-
-function gifDto(id: string, original = true): IGiphyGif {
-  return {
-    id,
-    slug: `slug-${id}`,
-    title: `GIF ${id}`,
-    url: `https://giphy.com/gifs/${id}`,
-    images: original
-      ? {
-          original: {
-            url: `https://media.test/${id}.gif`,
-            width: '480',
-            height: '270',
-          },
-          fixed_width: {
-            url: `https://media.test/${id}-200.gif`,
-            width: '200',
-            height: '113',
-          },
-        }
-      : {},
-  } as IGiphyGif;
-}
-
-function listResponse(data: IGiphyGif[], total = 100): IGiphyListResponse<IGiphyGif> {
-  return {
-    data,
-    pagination: {
-      offset: 0,
-      count: data.length,
-      total_count: total,
-    },
-    meta: {
-      status: 200,
-      msg: 'OK',
-      response_id: 'r',
-    },
-  };
-}
 
 describe('GifSearchFacade', () => {
   let trending$: Subject<IGiphyListResponse<IGiphyGif>>;
@@ -105,5 +70,50 @@ describe('GifSearchFacade', () => {
     facade.search('');
 
     expect(facade.$error()).toBe('unknown');
+  });
+
+  describe('keyword search', () => {
+    it('searches the trimmed query from the first page', () => {
+      const search$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      client.search$.mockReturnValue(search$);
+
+      facade.search('  happy cats ');
+
+      expect(client.search$).toHaveBeenCalledWith({
+        q: 'happy cats',
+        offset: 0,
+      });
+      expect(facade.$mode()).toBe('search');
+      expect(facade.$query()).toBe('happy cats');
+
+      search$.next(listResponse([gifDto('cat')]));
+
+      expect(facade.$items().map((gif) => gif.id)).toEqual(['cat']);
+    });
+
+    it('ignores the response of a query that was replaced by a newer one', () => {
+      const slow$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      const fast$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      client.search$.mockReturnValueOnce(slow$).mockReturnValueOnce(fast$);
+
+      facade.search('cats');
+      facade.search('dogs');
+      fast$.next(listResponse([gifDto('dog')]));
+      slow$.next(listResponse([gifDto('cat')]));
+
+      expect(facade.$query()).toBe('dogs');
+      expect(facade.$items().map((gif) => gif.id)).toEqual(['dog']);
+    });
+
+    it('reports an empty result as loaded with no items', () => {
+      const search$ = new Subject<IGiphyListResponse<IGiphyGif>>();
+      client.search$.mockReturnValue(search$);
+
+      facade.search('qwertyuiop');
+      search$.next(listResponse([], 0));
+
+      expect(facade.$status()).toBe('loaded');
+      expect(facade.$items()).toEqual([]);
+    });
   });
 });

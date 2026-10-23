@@ -147,9 +147,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** `search-form` (reactive form using `<app-input-control>`, `maxLength(50)`) emits a debounced (500 ms), trimmed, ≥ 2 chars, distinct query; Enter emits immediately. The page navigates with `?q=`, and the route `q` input drives `facade.search()` (AD-1), which cancels stale requests with `switchMap`. An empty `q` means trending. Zero results show "Nothing found for “…”".
 
 **Acceptance criteria:**
-- [ ] Typing "cats" shows search results under a heading for the query; clearing the field returns to trending; > 50 chars shows the error and makes no request.
-- [ ] `/?q=cats` on reload shows cats results; back/forward switches between queries.
-- [ ] Facade tests cover cancellation (a slow first response is ignored) and the empty-result state; e2e covers search, empty result, validation, and back/forward.
+- [x] Typing "cats" shows search results under a heading for the query; clearing the field returns to trending; > 50 chars shows the error and makes no request.
+- [x] `/?q=cats` on reload shows cats results; back/forward switches between queries.
+- [x] Facade tests cover cancellation (a slow first response is ignored) and the empty-result state; e2e covers search, empty result, validation, and back/forward.
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T8, T9, T10
