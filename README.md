@@ -3,8 +3,7 @@
 Search GIPHY, open a GIF's details, copy its link or download it. Built with Angular 22 (standalone,
 zoneless, signals), Angular Material 3 and Tailwind CSS v4.
 
-**Live demo:** `https://<your-github-user>.github.io/<repository-name>/` (available after the
-[one-time GitHub setup](#deploying-to-github-pages))
+**Live demo:** [syn1ak.github.io/gif-search](https://syn1ak.github.io/gif-search/)
 
 ![GIF Search showing trending GIFs in a masonry grid](docs/screenshot.png)
 
@@ -68,23 +67,6 @@ npm run e2e                           # end-to-end tests (Playwright); starts it
 | `npm run lint` / `npm run lint:fix`       | ESLint (angular-eslint), with fixes                                                                     |
 | `npm run format` / `npm run format:check` | Prettier, write or check                                                                                |
 | `npm run env`                             | Regenerate `src/environments/environment.generated.ts` from `GIPHY_API_KEY` (`.env` or the environment) |
-
-## Deploying to GitHub Pages
-
-`.github/workflows/deploy.yml` runs on every push and pull request: install, lint, format check, unit tests
-with coverage thresholds, e2e tests, then a production build. Pushes to `main` are also deployed to GitHub
-Pages. The build uses `/<repository-name>/` as its base path, so the repository can have any name.
-
-One-time setup:
-
-1. Create a GitHub repository and push this project to it.
-2. In **Settings → Secrets and variables → Actions**, add a repository secret named `GIPHY_API_KEY` with your
-   key.
-3. In **Settings → Pages**, set **Source** to **GitHub Actions**.
-4. Push to `main` (or run the workflow from the **Actions** tab). When it finishes, the site is at
-   `https://<your-github-user>.github.io/<repository-name>/`.
-
-Pull requests run all the checks but never deploy.
 
 ## About the API key and GIPHY's terms
 
@@ -150,20 +132,3 @@ The full specification and the implementation plan are in [`.claude/SPEC.md`](.c
   GIF for all media. A test fails if the app calls an endpoint the test did not mock, or if the page logs a
   console error or warning.
 - Automated tests never call the real GIPHY API.
-
-### Manual smoke checklist
-
-With a valid key in `.env` and `npm start` running:
-
-- [ ] Trending GIFs show on first load; typing "cats" searches after a short pause; Enter searches at once.
-- [ ] A query over 50 characters shows a validation error; clearing the field returns to trending.
-- [ ] Scrolling loads more results, down to "End of results".
-- [ ] Clicking a GIF opens its details (author, date, size); Esc closes it and returns focus to the card.
-- [ ] **Copy link** and **Copy GIPHY page link** put the right URLs on the clipboard.
-- [ ] **Download** saves `<slug>-<id>.gif`, and the file opens as a GIF.
-- [ ] Reloading `/?q=cats&gif=<id>` shows the cats results with that GIF open; Back closes it.
-- [ ] The theme toggle cycles System → Light → Dark, and the choice survives a reload.
-- [ ] With "reduce motion" turned on in the OS, the grid shows still frames that animate on hover or focus.
-- [ ] On a phone-sized window, the grid has two columns and the dialog fills the screen.
-- [ ] With the network offline (DevTools), a search shows the offline message, and **Try again** recovers once
-      back online.
