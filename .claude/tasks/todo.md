@@ -134,9 +134,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Add `ABaseInputComponent<T>` (CVA via `NgControl` self-injection, `ControlContainer`/`formControlName` resolution, touched on blur, `setDisabledState`, `ErrorStateMatcher`, `getErrors()` and `isRequired()`), the `VALIDATION_MESSAGES` token with defaults plus `provideValidationMessages()`, `<app-input-control>` (label, prefix/suffix icon, clear button, loading spinner, `enter` output), and `<app-form-error>`.
 
 **Acceptance criteria:**
-- [ ] In a reactive-form test host, value flows both ways, blur marks the control touched, `disable()` disables the input, and `required` / `maxlength` show messages only after touch.
-- [ ] Works with both `[formControl]` and `formControlName` inside a `[formGroup]`.
-- [ ] No `any`; no `NG_VALUE_ACCESSOR` provider.
+- [x] In a reactive-form test host, value flows both ways, blur marks the control touched, `disable()` disables the input, and `required` / `maxlength` show messages only after touch.
+- [x] Works with both `[formControl]` and `formControlName` inside a `[formGroup]`.
+- [x] No `any`; no `NG_VALUE_ACCESSOR` provider.
 
 **Verification:** standard trio (component tests use Material harnesses).
 **Dependencies:** T1 (can run alongside T8)

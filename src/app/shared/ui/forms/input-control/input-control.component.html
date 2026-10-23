@@ -1,0 +1,33 @@
+<mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-full">
+  @if ($label()) {
+    <mat-label>{{ $label() }}</mat-label>
+  }
+  @if ($prefixIcon()) {
+    <mat-icon matPrefix aria-hidden="true" class="mx-3">{{ $prefixIcon() }}</mat-icon>
+  }
+
+  <input
+    #input
+    matInput
+    appHostNgControl
+    [type]="$type()"
+    [value]="$value() ?? ''"
+    [placeholder]="$placeholder()"
+    [errorStateMatcher]="errorStateMatcher"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    (keydown.enter)="onEnter()"
+  />
+
+  @if ($loading()) {
+    <mat-progress-spinner matSuffix mode="indeterminate" diameter="20" class="mx-3" />
+  } @else if ($clearable() && $value()) {
+    <button matIconButton matSuffix type="button" aria-label="Clear" (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+
+  @for (error of $errors(); track error) {
+    <mat-error>{{ error }}</mat-error>
+  }
+</mat-form-field>

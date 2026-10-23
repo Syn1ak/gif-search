@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { MatIconRegistry } from '@angular/material/icon';
 import { GiphyApiError } from './models/giphy-error';
 import { GIPHY_CONFIG } from './tokens/giphy-config.token';
 import { provideCore } from './core.provider';
@@ -52,5 +53,9 @@ describe('provideCore', () => {
 
     expect(error).toBeInstanceOf(GiphyApiError);
     expect(error).toMatchObject({ kind: 'rate-limited' });
+  });
+
+  it('renders <mat-icon> ligatures with the Material Symbols Rounded font', () => {
+    expect(TestBed.inject(MatIconRegistry).getDefaultFontSetClass()).toEqual(['material-symbols-rounded']);
   });
 });

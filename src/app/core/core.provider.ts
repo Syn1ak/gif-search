@@ -3,6 +3,7 @@ import { EnvironmentProviders, Provider, provideBrowserGlobalErrorListeners } fr
 import { provideRouter, Routes, withComponentInputBinding, withViewTransitions } from '@angular/router';
 import { giphyApiKeyInterceptor } from './interceptors/giphy-api-key.interceptor';
 import { giphyErrorInterceptor } from './interceptors/giphy-error.interceptor';
+import { provideMaterialSymbols } from './providers/material-symbols.provider';
 
 export type TCoreOptions = {
   routes: Routes;
@@ -13,5 +14,6 @@ export function provideCore({ routes }: TCoreOptions): (Provider | EnvironmentPr
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding(), withViewTransitions({ skipInitialTransition: true })),
     provideHttpClient(withFetch(), withInterceptors([giphyApiKeyInterceptor, giphyErrorInterceptor])),
+    provideMaterialSymbols(),
   ];
 }
