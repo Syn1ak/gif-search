@@ -59,4 +59,21 @@ describe('GifCardComponent', () => {
     expect(button.getAttribute('aria-label')).toBe('Open details for Happy Cat');
     expect(opened).toEqual([GIF]);
   });
+
+  it('has a separate quick copy button that emits copyLink without opening the details', () => {
+    const opened: TGif[] = [];
+    const copied: TGif[] = [];
+    fixture.componentInstance.$open.subscribe((gif) => opened.push(gif));
+    fixture.componentInstance.$copyLink.subscribe((gif) => copied.push(gif));
+
+    const copyButton = element.querySelector<HTMLButtonElement>(
+      'button[aria-label="Copy link to Happy Cat"]',
+    )!;
+    copyButton.click();
+
+    expect(copyButton.type).toBe('button');
+    expect(copyButton.closest('button[aria-label^="Open details"]')).toBeNull();
+    expect(copied).toEqual([GIF]);
+    expect(opened).toEqual([]);
+  });
 });

@@ -4,6 +4,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { buildGifDto, buildListResponse } from '../../../../../../testing/giphy-builders';
 import { GifsClient } from '../../../../../core/services/api/giphy/gifs.client';
+import { GifActionsService } from '../../../features/gif-details-modal/data-access/services/gif-actions.service';
 import { ROUTES } from '../gif-search.routes';
 
 describe('GifSearchComponent', () => {
@@ -91,5 +92,20 @@ describe('GifSearchComponent', () => {
 
     const title = document.querySelector('mat-dialog-container [mat-dialog-title]');
     expect(title?.textContent?.trim()).toBe('GIF trend');
+  });
+
+  it('copies a card’s media link from its quick copy button without opening the dialog', async () => {
+    const copyMediaLink = vi
+      .spyOn(TestBed.inject(GifActionsService), 'copyMediaLink')
+      .mockImplementation(() => undefined);
+    const harness = await RouterTestingHarness.create('/');
+
+    harness
+      .routeNativeElement!.querySelector<HTMLButtonElement>('button[aria-label^="Copy link to"]')!
+      .click();
+    await harness.fixture.whenStable();
+
+    expect(copyMediaLink).toHaveBeenCalledWith(expect.objectContaining({ id: 'trend' }));
+    expect(document.querySelector('mat-dialog-container')).toBeNull();
   });
 });

@@ -22,7 +22,7 @@ const MOBILE_COLUMNS = 2;
       @for (column of $columns(); track $index) {
         <div class="flex min-w-0 flex-1 flex-col gap-3 sm:gap-4">
           @for (gif of column; track gif.id) {
-            <app-gif-card [gif]="gif" (open)="$open.emit($event)" />
+            <app-gif-card [gif]="gif" (open)="$open.emit($event)" (copyLink)="$copyLink.emit($event)" />
           }
         </div>
       }
@@ -35,6 +35,7 @@ export class GifGridComponent {
 
   readonly $items = input.required<TGif[]>({ alias: 'items' });
   readonly $open = output<TGif>({ alias: 'open' });
+  readonly $copyLink = output<TGif>({ alias: 'copyLink' });
 
   private readonly $columnCount = toSignal(
     this.breakpointObserver

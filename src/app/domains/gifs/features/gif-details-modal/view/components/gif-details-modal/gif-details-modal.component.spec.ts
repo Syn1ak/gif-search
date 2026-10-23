@@ -5,12 +5,23 @@ import { MatDialog } from '@angular/material/dialog';
 import { buildGif } from '../../../../../../../../testing/gif-builders';
 import { TGif } from '../../../../../models/gif.types';
 import { GifDetailsModalFacade } from '../../../data-access/facades/gif-details-modal.facade';
+import { GifActionsService } from '../../../data-access/services/gif-actions.service';
 
 describe('GifDetailsModalComponent', () => {
+  let gifActions: { copyMediaLink: ReturnType<typeof vi.fn>; copyPageLink: ReturnType<typeof vi.fn> };
+
   beforeEach(() => {
+    gifActions = {
+      copyMediaLink: vi.fn(),
+      copyPageLink: vi.fn(),
+    };
     TestBed.configureTestingModule({
       providers: [
         GifDetailsModalFacade,
+        {
+          provide: GifActionsService,
+          useValue: gifActions,
+        },
         // Closing then completes at once instead of waiting for the exit animation.
         {
           provide: MATERIAL_ANIMATIONS,
@@ -76,6 +87,21 @@ describe('GifDetailsModalComponent', () => {
     expect(link.href).toBe('https://giphy.com/gifs/happy-cat-abc');
     expect(link.target).toBe('_blank');
     expect(link.rel).toBe('noopener noreferrer');
+  });
+
+  it('copies the media link and the GIPHY page link', async () => {
+    const gif = buildGif();
+    const container = await openDialog(gif);
+    const button = (label: string) =>
+      [...container.querySelectorAll<HTMLButtonElement>('mat-dialog-actions button')].find((candidate) =>
+        candidate.textContent?.trim().endsWith(label),
+      )!;
+
+    button('Copy link').click();
+    expect(gifActions.copyMediaLink).toHaveBeenCalledWith(gif);
+
+    button('Copy GIPHY page link').click();
+    expect(gifActions.copyPageLink).toHaveBeenCalledWith(gif);
   });
 
   it('says what is unknown when Giphy has no author, date, size or source', async () => {

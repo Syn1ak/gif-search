@@ -208,9 +208,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** `GifActionsService` (feature `data-access`): `copyMediaLink(gif)` and `copyPageLink(gif)` via CDK `Clipboard`, with a snackbar on success or failure. The modal gets two copy buttons. The card gets a quick-copy icon button (output → page → service) that shows on hover/focus.
 
 **Acceptance criteria:**
-- [ ] Each button puts the correct URL on the clipboard and shows "Link copied"; a failure shows an error snackbar.
-- [ ] Quick copy on a card does not open the modal (event isolation).
-- [ ] Service tests cover success and failure; e2e reads the clipboard back.
+- [x] Each button puts the correct URL on the clipboard and shows "Link copied"; a failure shows an error snackbar.
+- [x] Quick copy on a card does not open the modal (event isolation).
+- [x] Service tests cover success and failure; e2e reads the clipboard back.
 
 **Verification:** standard trio + `npm run e2e`.
 **Dependencies:** T14

@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { buildGif } from '../../../../../../../testing/gif-builders';
+import { GifActionsService } from '../services/gif-actions.service';
 import { GifDetailsModalFacade } from './gif-details-modal.facade';
 
 describe('GifDetailsModalFacade', () => {
@@ -61,5 +62,18 @@ describe('GifDetailsModalFacade', () => {
     facade.open(buildGif());
 
     expect(dialog.openDialogs).toHaveLength(1);
+  });
+
+  it('copies links through the GIF actions', () => {
+    const gifActions = TestBed.inject(GifActionsService);
+    const copyMediaLink = vi.spyOn(gifActions, 'copyMediaLink').mockImplementation(() => undefined);
+    const copyPageLink = vi.spyOn(gifActions, 'copyPageLink').mockImplementation(() => undefined);
+    const gif = buildGif();
+
+    facade.copyMediaLink(gif);
+    facade.copyPageLink(gif);
+
+    expect(copyMediaLink).toHaveBeenCalledWith(gif);
+    expect(copyPageLink).toHaveBeenCalledWith(gif);
   });
 });

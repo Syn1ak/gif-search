@@ -71,7 +71,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 
 ### Phase 3: Details and actions
 - [x] T14: GIF details modal
-- [ ] T15: Copy links
+- [x] T15: Copy links
 - [ ] T16: Download GIF
 - [ ] T17: Deep link `?gif=<id>`
 

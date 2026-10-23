@@ -30,9 +30,17 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <a matButton="tonal" [href]="gif.pageUrl" target="_blank" rel="noopener noreferrer">
+    <a matButton [href]="gif.pageUrl" target="_blank" rel="noopener noreferrer">
       <mat-icon>open_in_new</mat-icon>
       Open on GIPHY
     </a>
+    <button matButton type="button" (click)="facade.copyPageLink(gif)">
+      <mat-icon>link</mat-icon>
+      Copy GIPHY page link
+    </button>
+    <button matButton="tonal" type="button" (click)="facade.copyMediaLink(gif)">
+      <mat-icon>content_copy</mat-icon>
+      Copy link
+    </button>
   </mat-dialog-actions>
 }
