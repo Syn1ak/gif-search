@@ -1,8 +1,5 @@
 import { buildGif, buildGifs, expect, test } from './support/giphy-mock';
 
-const cards = (page: import('@playwright/test').Page) =>
-  page.getByRole('button', { name: /^Open details for/ });
-
 test.describe('GIF deep link', () => {
   test('opens the search with the GIF’s details on top, loading the GIF by id', async ({ page, giphy }) => {
     await giphy.search('cats', buildGifs(6, 'cat'));
@@ -13,8 +10,20 @@ test.describe('GIF deep link', () => {
     const dialog = page.getByRole('dialog', { name: 'Funny GIF shared-1' });
     await expect(dialog).toBeVisible();
     await expect(dialog.getByRole('img', { name: 'Animated GIF shared-1' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Results for “cats”' })).toBeAttached();
-    await expect(cards(page)).toHaveCount(6);
+    // Behind an open modal, Material hides the page from assistive technology (once its opening
+    // animation ends), so role queries for the page underneath must include hidden elements.
+    await expect(
+      page.getByRole('heading', {
+        name: 'Results for “cats”',
+        includeHidden: true,
+      }),
+    ).toBeAttached();
+    await expect(
+      page.getByRole('button', {
+        name: /^Open details for/,
+        includeHidden: true,
+      }),
+    ).toHaveCount(6);
     expect(byId.requests).toHaveLength(1);
   });
 
