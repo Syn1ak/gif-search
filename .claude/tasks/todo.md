@@ -52,9 +52,9 @@ At the end of each task Claude stops and proposes the commit (the suggested titl
 **Description:** Type the Giphy contract (GIF, images/renditions, user, list/single response, pagination, meta, search criteria). Implement `GifsClient` with `search$`, `trending$`, and `getById$`, plus a functional interceptor that appends `api_key` for the Giphy host only. Wire everything into `provideCore()` (http with `withFetch` and interceptors, zoneless, router with component input binding and view transitions).
 
 **Acceptance criteria:**
-- [ ] The client produces the correct URLs and params (`q`, `limit`, `offset`, `rating=g` default, `lang=en`), proven by `HttpTestingController` tests.
-- [ ] The interceptor adds `api_key` to `api.giphy.com` requests and leaves other hosts (e.g. `media.giphy.com`) alone, proven by tests.
-- [ ] `app.config.ts` only calls `provideCore({ routes })`.
+- [x] The client produces the correct URLs and params (`q`, `limit`, `offset`, `rating=g` default, `lang=en`), proven by `HttpTestingController` tests.
+- [x] The interceptor adds `api_key` to `api.giphy.com` requests and leaves other hosts (e.g. `media.giphy.com`) alone, proven by tests.
+- [x] `app.config.ts` only calls `provideCore({ routes })`.
 
 **Verification:** standard trio.
 **Dependencies:** T3

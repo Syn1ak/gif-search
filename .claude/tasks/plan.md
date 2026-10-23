@@ -52,7 +52,7 @@ T1..T19 ── T20 CI/deploy ── T21 README
 - [x] T1: Scaffold the Angular 22 workspace and tooling
 - [x] T2: Material M3 + Tailwind v4 theme foundation
 - [x] T3: API key pipeline and `GIPHY_CONFIG`
-- [ ] T4: Giphy DTOs, `GifsClient`, and API-key interceptor
+- [x] T4: Giphy DTOs, `GifsClient`, and API-key interceptor
 - [ ] T5: Giphy error normalisation
 - [ ] T6: `TGif` view model and mapper
 
